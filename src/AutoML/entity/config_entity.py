@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class Data_Ingestion_Config:
     root_dir: str
     data_path: str
+    unzip_path: str
 
 @dataclass(frozen=True)
 class Regression_Data_Transformation_Config:
