@@ -53,7 +53,10 @@ class Classification_Model_Evaluation:
                 mlflow.sklearn.log_model(model,"model",registered_model_name="Logistic Regression Model")
             else:
                 mlflow.sklearn.load_model(model,'model')
-            
+    
+    def initiate_model_evaluation(self):
+        self.log_into_mlflow()
+    
 class Regression_Model_Evaluation:
     def __init__(self,config:Model_Evaluation_Config):
         self.config = config
@@ -92,4 +95,5 @@ class Regression_Model_Evaluation:
             else:
                 mlflow.sklearn.load_model(model,'model')
             
-        
+    def initiate_model_evaluation(self):
+        self.log_into_mlflow()

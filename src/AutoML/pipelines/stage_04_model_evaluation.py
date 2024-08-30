@@ -1,0 +1,37 @@
+from src.AutoML.utils.common import logger
+from src.AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation 
+from src.AutoML.config.configuration import Configuration_Manager
+
+STAGE_NAME = 'Model Evaluation Stage'
+
+class ModelEvaluationTrainingPipeline:
+    def __init__(self):
+        pass
+    
+    def main(self, mode='regression'):    
+        try:
+            if mode == 'regression':
+                config = Configuration_Manager()
+                model_evaluation_config = config.get_regression_model_evaluation_config()
+                model_evaluation = Regression_Model_Evaluation(config=model_evaluation_config)
+                model_evaluation.initiate_model_evaluation()
+
+            elif mode == 'classification':
+                config = Configuration_Manager()
+                model_evaluation_config = config.get_classification_model_evaluation_config()
+                model_evaluation = Classification_Model_Evaluation(config=model_evaluation_config)
+                model_evaluation.initiate_model_evaluation()
+            else:
+                raise ValueError(f"Invalid mode: {mode}. Please enter either 'regression' or 'classification")
+        except Exception as e:
+            raise e
+
+if __name__ == "__main__":
+    try:
+        logger.info(f'>>>>>>> STAGE {STAGE_NAME} Started <<<<<<<')
+        obj = ModelEvaluationTrainingPipeline()
+        obj.main()
+        logger.info(f'>>>>>>> STAGE {STAGE_NAME} Completed <<<<<<<\n\nx=============x')
+    except Exception as e:
+        logger.exception(e)
+        raise e
