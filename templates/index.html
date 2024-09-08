@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated ML</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1b141f;
+        }
+
+        div {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            width: 50rem;
+            transform: translate(-50%, -50%);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+        }
+
+        .about {
+            text-align: center;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 16vh;
+        }
+
+        .upload {
+            text-align: center;
+            margin-top: 24vh;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .upload input[type="file"] {
+            display: none;
+        }
+
+        .upload label {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload label:hover {
+            background-color: #0056b3;
+        }
+
+        .upload input[type="submit"] {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+
+        <div class="about">
+            <h1>Automated ML</h1>
+            <p>Automated ML is a tool that automatically trains machine learning models for you. It is a great tool for
+                those who are new to machine learning and want to get started quickly.</p>
+            <p>With Automated ML, you can upload your data, select the type of model you want to train, and let the tool
+                do the rest. It will automatically preprocess your data, train the model, and evaluate its performance.
+            </p>
+            <p>Automated ML supports a variety of machine learning tasks, including classification, regression, and
+                clustering. It also supports a wide range of algorithms, so you can choose the one that best fits your
+                data and problem.</p>
+            <p>Whether you are a beginner or an experienced data scientist, Automated ML can help you save time and
+                effort by automating the machine learning process. Try it out today and see how easy it is to train
+                machine learning models!</p>
+        </div>
+        <br>
+        <div class="buttons">
+            <input type="radio" id="classification" name="prediction_type" value="classification">
+            <label for="classification">Classification</label>
+            <input type="radio" id="regression" name="prediction_type" value="regression">
+            <label for="regression">Regression</label>
+            <input type="radio" id="clustering" name="prediction_type" value="clustering">
+            <label for="clustering">Clustering</label>
+        </div>
+        <br>
+        <div class="upload">
+            <form action="upload.php" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file" accept=".csv">
+                <label for="file">Choose a file</label>
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Page</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #1b141f;
+    }
+
+    div {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        width: 50rem;
+        transform: translate(-50%, -50%);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin: 0 0 10px 0;
+    }
+
+    p {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+
+    .download {
+        text-align: center;
+        margin-top: 24vh;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+</style>
+<body>
+    <div>
+        <div>
+            <h1>{{ model_name }} for {{ prediction_type }}</h1>
+            <p>{{ model_description }}</p>
+        </div>
+        <div>
+            <h1>Model Performance</h1>
+            <p>{{ model_report }}</p>
+        </div>
+        <div class="download">
+            <a href="{{ model_path }}" class="button">Download Model</a>
+        </div>
+    </div>
+</body>
+</html>
