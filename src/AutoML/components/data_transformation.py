@@ -11,7 +11,7 @@ from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
 
-class Regression_Data_Transformation:
+class Data_Transformation:
     def __init__(self, config: Data_Transformation_Config):
         """Initializes the regression data transformation with config settings."""
         self.config = config
@@ -93,69 +93,6 @@ class Regression_Data_Transformation:
 
         # Standardize the final data
         self.standardize_data()
-
-        # Save the transformed data
-        self.save_data()
-
-
-class Classification_Data_Transformation:
-    def __init__(self, config: Data_Transformation_Config):
-        """Initializes the classification data transformation with config settings."""
-        self.config = config
-        self.data = pd.read_csv(self.config.data_path)  # Load data from CSV
-        self.pca_components = 10
-
-    def reduce_dimensionality(self):
-        """Reduces the dimensionality using PCA."""
-        pca = PCA(n_components=self.pca_components)
-        self.data = pca.fit_transform(self.data)
-
-    def standardize_data(self):
-        """Standardizes the numerical data using StandardScaler."""
-        numerical_features, _ = self.get_features()
-        standard_scaler = StandardScaler()
-        self.data[numerical_features] = standard_scaler.fit_transform(self.data[numerical_features])
-
-    def select_features(self):
-        """Selects features based on correlation with the target variable."""
-        corr_matrix = self.data.corr().abs()
-        target_corr = corr_matrix['target'].sort_values(ascending=False)
-
-        # Select top features
-        selected_features = target_corr[:self.pca_components].index
-        self.data = self.data[selected_features]
-
-
-    def save_data(self):
-        """Saves the transformed data to the output path defined in config."""
-        output_path = os.path.join(self.config.output_dir, "transformed_classification_data.csv")
-        self.data.to_csv(output_path, index=False)
-        logger.info(f"Transformed classification data saved at {output_path}")
-
-    def get_features(self):
-        """Returns numerical and object (categorical) features from the dataset."""
-        numerical_features = self.data.select_dtypes(include=[np.number]).columns
-        object_features = self.data.select_dtypes(include=[object]).columns
-        return numerical_features, object_features
-
-    def initiate_data_transformation(self):
-        """Initiates the complete data transformation process for classification."""
-        logger.info("Initiating Classification Data Transformation")
-
-        # Count number of features
-        feature_count = len(self.data.columns)
-
-        # Standardize numerical features
-        self.standardize_data()
-
-        # Perform feature selection and dimensionality reduction based on feature count
-        if feature_count >= 30:
-            logger.info("Feature count is greater than 30, selecting top features using correlation")
-            self.select_features()
-
-        if feature_count >= 20:
-            logger.info("Feature count is greater than 20, reducing dimensionality using PCA")
-            self.reduce_dimensionality()
 
         # Save the transformed data
         self.save_data()
