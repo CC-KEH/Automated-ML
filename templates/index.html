@@ -11,18 +11,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1b141f;
-        }
-
-        div {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            width: 50rem;
-            transform: translate(-50%, -50%);
         }
 
         h1 {
@@ -35,74 +23,94 @@
             margin: 0 0 10px 0;
         }
 
-        .about {
-            text-align: center;
+        .left_div {
+            position: absolute;
+            background-color: #fff;
+            width: 45%;
+            height: 100%;
         }
 
-        .buttons {
-            text-align: center;
-            margin-top: 16vh;
+        .info_div{
+            padding: 10px;
+            height: 50%;
         }
 
-        .upload {
-            text-align: center;
-            margin-top: 24vh;
+        .hover_div {
+            display: flex;
+            justify-content: space-between;
+            height: 47%;
         }
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
+        .hover_item {
             background-color: #007bff;
+            /* padding: 15px; */
             color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-
-        .upload input[type="file"] {
-            display: none;
-        }
-
-        .upload label {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 33.33%;
             cursor: pointer;
         }
 
-        .upload label:hover {
+        .hover_item:hover {
             background-color: #0056b3;
         }
 
-        .upload input[type="submit"] {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
+        .right_div{
+            position: absolute;
+            right: 0;
+            width: 55%;
+            height: 100%;
+        }
+        .right_form{
+            padding: 10px;
+            height: 50%;
+        }
+        .models_div{
+            display: flex;
+            justify-content: space-between;
+        }
+        .models_div h1{
+            margin-top: 8px;
+        }
+        button{
+            padding: 10px;
+            background-color: #fff;
+            color: black;
             cursor: pointer;
+            border-radius: 4px;
+            height: 40px;
+            border-width: 1px;
+        }
+        button:hover{
+            background-color: #6f7399;
+            color: #fff;
+        }
+        button:focus{
+            background-color: #6f7399;
+            color: #fff;
         }
 
-        .upload input[type="submit"]:hover {
-            background-color: #0056b3;
+        .params_div{
+            margin-top: 5%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .params_div h1{
+            margin-top: 5px;
+        }
+        .params_div select{
+            width: 24%;
+            padding: 10px;
+            border-radius: 4px;
         }
     </style>
 </head>
 
 <body>
-    <div>
-
-        <div class="about">
+    <div class="left_div">
+        <div class="info_div">
             <h1>Automated ML</h1>
             <p>Automated ML is a tool that automatically trains machine learning models for you. It is a great tool for
                 those who are new to machine learning and want to get started quickly.</p>
@@ -116,22 +124,63 @@
                 effort by automating the machine learning process. Try it out today and see how easy it is to train
                 machine learning models!</p>
         </div>
-        <br>
-        <div class="buttons">
-            <input type="radio" id="classification" name="prediction_type" value="classification">
-            <label for="classification">Classification</label>
-            <input type="radio" id="regression" name="prediction_type" value="regression">
-            <label for="regression">Regression</label>
-            <input type="radio" id="clustering" name="prediction_type" value="clustering">
-            <label for="clustering">Clustering</label>
+        <div class="hover_div">
+            <div class="hover_item">
+                Regression
+            </div>
+            <div class="hover_item">
+                Classification
+            </div>
+            <div class="hover_item">
+                Clustering
+            </div>
         </div>
-        <br>
-        <div class="upload">
-            <form action="upload.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file" accept=".csv">
-                <label for="file">Choose a file</label>
-                <input type="submit" value="Upload">
-            </form>
+    </div>
+    <div class="right_div">
+        <div class="right_form">
+            <div class="models_div">
+            <h1>Choose the Model</h1>
+                <button>Linear Regression</button>
+                <button>Logistic Regression</button>
+                <button>Decision Trees</button>
+                <button>Random Forest</button>
+            </div>
+            <div class="params_div">
+            <h1>Choose Parameters</h1>
+                <dropdown>
+                    <select name="param1" id="param1">
+                        <option value="param1">Param1</option>
+                        <option value="param2">Param2</option>
+                        <option value="param3">Param3</option>
+                        <option value="param3">Param3</option>
+                    </select>
+                    <select name="param2" id="param2">
+                        <option value="param1">Param1</option>
+                        <option value="param2">Param2</option>
+                        <option value="param3">Param3</option>
+                        <option value="param3">Param3</option>
+                    </select>
+                    <select name="param3" id="param3">
+                        <option value="param1">Param1</option>
+                        <option value="param2">Param2</option>
+                        <option value="param2">Param2</option>
+                        <option value="param3">Param3</option>
+                    </select>
+                    <!-- Max number of Features -->
+                    <select name="param4" id="param4">
+                        <option value="param1">Param1</option>
+                        <option value="param2">Param2</option>
+                        <option value="param2">Param2</option>
+                        <option value="param3">Param3</option>
+                    </select>
+            </div>
+            <switch>
+                <input type="checkbox" id="tune_parameters" name="tune_parameters">
+                <label for="tune_parameters">Tune Hyperparameters</label>
+            </switch>
+            <button>Upload Dataset</button>
+            <button>Train Model</button>
+            <button>Train Default Model</button>
         </div>
     </div>
 </body>
