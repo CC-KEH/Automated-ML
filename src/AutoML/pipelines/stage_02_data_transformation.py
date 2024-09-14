@@ -1,5 +1,5 @@
 from src.AutoML.utils.common import logger
-from src.AutoML.components.data_transformation import Regression_Data_Transformation, Classification_Data_Transformation 
+from src.AutoML.components.data_transformation import Data_Transformation
 from src.AutoML.config.configuration import Configuration_Manager
 
 STAGE_NAME = 'Data Transformation'
@@ -10,18 +10,10 @@ class DataTransformationTrainingPipeline:
     
     def main(self, mode='regression'):    
         try:
-            if mode == 'regression':
-                config = Configuration_Manager()
-                data_transformation_config = config.get_regression_data_transformation_config()
-                data_transformation = Regression_Data_Transformation(config=data_transformation_config)
-                data_transformation.initiate_data_transformation()
-            elif mode == 'classification':
-                config = Configuration_Manager()
-                data_transformation_config = config.get_classification_data_transformation_config()
-                data_transformation = Classification_Data_Transformation(config=data_transformation_config)
-                data_transformation.initiate_data_transformation()
-            else:
-                raise ValueError(f"Invalid mode: {mode}. Please enter either 'regression' or 'classification")
+            config = Configuration_Manager()
+            data_transformation_config = config.get_data_transformation_config()
+            data_transformation = Data_Transformation(config=data_transformation_config)
+            data_transformation.initiate_data_transformation()
         except Exception as e:
             raise e
 

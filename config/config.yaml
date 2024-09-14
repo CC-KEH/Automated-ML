@@ -14,7 +14,7 @@ data_transformation:
 model_training:
   root_dir: artifacts/model_trainer
   train_path: artifacts/data_transformation/train.csv
-
+  
 model_evaluation:
   root_dir: artifacts/model_evaluation
   test_path: artifacts/data_transformation/test.csv

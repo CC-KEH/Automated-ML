@@ -6,6 +6,7 @@ from src.AutoML.utils import logger
 from src.AutoML.entity.config_entity import Data_Transformation_Config
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
@@ -44,12 +45,16 @@ class Data_Transformation:
         selected_features = positive_features.append(negative_features)
         self.data = self.data[selected_features]
 
-    def save_data(self):
+    def split_and_save_data(self):
         """Saves the transformed data to the output path defined in config."""
-        output_path = os.path.join(self.config.output_dir, "transformed_data.csv")
-        self.data.to_csv(output_path, index=False)
-        logger.info(f"Transformed data saved at {output_path}")
-
+        X_train,X_test,y_train,y_test = train_test_split(self.data.drop('target', axis=1), self.data['target'], test_size=0.2, random_state=42)
+        train_data = pd.concat([X_train, y_train], axis=1)
+        test_data = pd.concat([X_test, y_test], axis=1)
+        
+        train_data.to_csv(self.config.train_path, index=False)
+        test_data.to_csv(self.config.test_path, index=False)
+        logger.info("Splitted and saved the transformed data.")
+        
     def get_features(self):
         """Returns numerical and object (categorical) features from the dataset."""
         numerical_features = self.data.select_dtypes(include=[np.number]).columns
@@ -76,7 +81,12 @@ class Data_Transformation:
 
         # Count number of features
         feature_count = len(self.data.columns)
+        
+        # Remove duplicate features
+        self.data = self.data.drop_duplicates()
+        
         numerical_features, object_features = self.get_features()
+        
         categorical_features, object_features = self.get_categorical_features(object_features)
 
         # Standardize numerical features
@@ -95,4 +105,4 @@ class Data_Transformation:
         self.standardize_data()
 
         # Save the transformed data
-        self.save_data()
+        self.split_and_save_data()

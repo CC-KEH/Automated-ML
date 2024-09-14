@@ -1,7 +1,5 @@
 import joblib
-import pandas as pd
 from src.AutoML.utils import logger
-from src.AutoML.utils.common import save_model
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -12,10 +10,11 @@ from sklearn.mode_selection import GridSearchCV, train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score, f1_score, precision_score, recall_score
 
 from src.AutoML.config.configuration import Configuration_Manager
+from src.AutoML.entity.config_entity import Model_Trainer_Config
 
 class Regression_Model_Trainer:
-    def __init__(self) -> None:
-        self.config, self.params = Configuration_Manager().get_regression_model_trainer_config()
+    def __init__(self,config: Model_Trainer_Config) -> None:
+        self.config, self.params = config
         self.models = {
             'LinearRegression': LinearRegression(),
             'Ridge': Ridge(),
@@ -31,6 +30,8 @@ class Regression_Model_Trainer:
             test_size=self.config['test_size'], 
             random_state=self.config['random_state']
         )
+        self.best_model = None
+        
     
     def get_metrics(self, y_true, y_pred):
         return {
@@ -39,15 +40,36 @@ class Regression_Model_Trainer:
             'r2_score': r2_score(y_true, y_pred)
         }
     
+    def fine_tune_hyperparameters(self, model):
+        gs = GridSearchCV(model, self.params[model], cv=5, n_jobs=-1)
+        gs.fit(self.X_train, self.y_train)
+        return gs.best_estimator_
+    
+    def finetune_and_save_model(self, model, model_name):
+        best_estimator = self.fine_tune_hyperparameters(model)
+        joblib.dump(best_estimator, f'{self.config.root_dir}/{model_name}.pkl')
+        logger.info(f'{model_name} model saved successfully')
+        
     def initiate_model_training(self):
         logger.info("Initiating Regression Model Training")
+        
         for model_name, model in self.models.items():
             model.fit(self.X_train, self.y_train)
-            save_model(model, model_name)
+            
             logger.info(f'{model_name} model trained successfully')
+            
             metrics = self.get_metrics(self.y_val,model.predict(self.X_val))
+            
             logger.info(f'{model_name} \n Metrics: {metrics}')
             
+            if self.best_model is None:
+                self.best_model = {model_name: [model, metrics]}
+            
+            elif metrics['mean_squared_error'] < self.best_model[model_name][1]['mean_squared_error']:
+                    self.best_model = {model_name: [model, metrics]}
+        
+        self.finetune_and_save_model(self.best_model, self.best_model.keys()[0])
+        
 class Classification_Model_Trainer:
     def __init__(self) -> None:
         self.config, self.params = Configuration_Manager().get_classification_model_trainer_config()
@@ -65,6 +87,7 @@ class Classification_Model_Trainer:
             test_size=self.config['test_size'], 
             random_state=self.config['random_state']
         )
+        self.best_model = None
     
     def get_metrics(self, y_true, y_pred):
         return {
@@ -74,11 +97,33 @@ class Classification_Model_Trainer:
             'recall_score': recall_score(y_true, y_pred)
         }
     
+    def fine_tune_hyperparameters(self, model):
+        gs = GridSearchCV(model, self.params[model], cv=5, n_jobs=-1)
+        gs.fit(self.X_train, self.y_train)
+        return gs.best_estimator_, gs.best_params_
+    
+    def finetune_and_save_model(self, model, model_name):
+        best_estimator = self.fine_tune_hyperparameters(model)
+        joblib.dump(best_estimator, f'{self.config.root_dir}/{model_name}.pkl')
+        logger.info(f'{model_name} model saved successfully')
+        
     def initiate_model_training(self):
         logger.info("Initiating Classification Model Training")
+        
         for model_name, model in self.models.items():
             model.fit(self.X_train, self.y_train)
-            save_model(model, model_name)
+
             logger.info(f'{model_name} model trained successfully')
+
             metrics = self.get_metrics(self.y_val,model.predict(self.X_val))
+            
             logger.info(f'{model_name} \n Metrics: {metrics}')
+            
+            if self.best_model is None:
+                self.best_model = {model_name: [model, metrics]}
+            
+            elif metrics['accuracy_score'] < self.best_model[model_name][1]['accuracy_score']:
+                    self.best_model = {model_name: [model, metrics]}
+        
+        self.finetune_and_save_model(self.best_model, self.best_model.keys()[0])
+        

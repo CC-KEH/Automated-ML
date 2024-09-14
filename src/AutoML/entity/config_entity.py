@@ -8,32 +8,17 @@ class Data_Ingestion_Config:
     unzip_path: str
 
 @dataclass(frozen=True)
-class Regression_Data_Transformation_Config:
-    root_dir: Path
-    data_path: Path
-
-@dataclass(frozen=True)
-class Classification_Data_Transformation_Config:
+class Data_Transformation_Config:
     root_dir: str
     data_path: str
     train_path: str
     test_path: str
     
 @dataclass(frozen=True)
-class Regression_Model_Trainer_Config:
+class Model_Trainer_Config:
     root_dir: Path
     train_path: Path
-    test_path: Path
     params: dict
-    target_column: str
-    
-@dataclass(frozen=True)
-class Classification_Model_Trainer_Config:
-    root_dir: Path
-    train_path: Path
-    test_path: Path
-    params: dict
-    target_column: str
 
 @dataclass(frozen=True)
 class Model_Evaluation_Config:
