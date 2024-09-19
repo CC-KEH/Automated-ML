@@ -11,11 +11,16 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 50px;
             margin: 0 0 10px 0;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-bottom: 20px;
         }
 
         p {
@@ -25,8 +30,7 @@
 
         .left_div {
             position: absolute;
-            background-color: #fff;
-            width: 45%;
+            width: 50%;
             height: 100%;
         }
 
@@ -35,53 +39,30 @@
             height: 50%;
         }
 
-        .hover_div {
-            display: flex;
-            justify-content: space-between;
-            height: 47%;
-        }
-
-        .hover_item {
-            background-color: #007bff;
-            /* padding: 15px; */
-            color: #fff;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 33.33%;
-            cursor: pointer;
-        }
-
-        .hover_item:hover {
-            background-color: #0056b3;
-        }
-
         .right_div{
             position: absolute;
             right: 0;
-            width: 55%;
+            width: 50%;
             height: 100%;
         }
         .right_form{
             padding: 10px;
-            height: 50%;
-        }
-        .models_div{
+            height: 90%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        .models_div h1{
-            margin-top: 8px;
-        }
+        
         button{
             padding: 10px;
-            background-color: #fff;
+            background-color: transparent;
             color: black;
             cursor: pointer;
             border-radius: 4px;
             height: 40px;
             border-width: 1px;
+            margin: 12px;
         }
         button:hover{
             background-color: #6f7399;
@@ -91,19 +72,9 @@
             background-color: #6f7399;
             color: #fff;
         }
-
-        .params_div{
-            margin-top: 5%;
-            display: flex;
-            justify-content: space-between;
-        }
-        .params_div h1{
-            margin-top: 5px;
-        }
-        .params_div select{
-            width: 24%;
-            padding: 10px;
-            border-radius: 4px;
+        switch > input[type="checkbox"] {
+            accent-color: #6f7399;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -124,63 +95,17 @@
                 effort by automating the machine learning process. Try it out today and see how easy it is to train
                 machine learning models!</p>
         </div>
-        <div class="hover_div">
-            <div class="hover_item">
-                Regression
-            </div>
-            <div class="hover_item">
-                Classification
-            </div>
-            <div class="hover_item">
-                Clustering
-            </div>
-        </div>
     </div>
     <div class="right_div">
         <div class="right_form">
-            <div class="models_div">
-            <h1>Choose the Model</h1>
-                <button>Linear Regression</button>
-                <button>Logistic Regression</button>
-                <button>Decision Trees</button>
-                <button>Random Forest</button>
-            </div>
-            <div class="params_div">
-            <h1>Choose Parameters</h1>
-                <dropdown>
-                    <select name="param1" id="param1">
-                        <option value="param1">Param1</option>
-                        <option value="param2">Param2</option>
-                        <option value="param3">Param3</option>
-                        <option value="param3">Param3</option>
-                    </select>
-                    <select name="param2" id="param2">
-                        <option value="param1">Param1</option>
-                        <option value="param2">Param2</option>
-                        <option value="param3">Param3</option>
-                        <option value="param3">Param3</option>
-                    </select>
-                    <select name="param3" id="param3">
-                        <option value="param1">Param1</option>
-                        <option value="param2">Param2</option>
-                        <option value="param2">Param2</option>
-                        <option value="param3">Param3</option>
-                    </select>
-                    <!-- Max number of Features -->
-                    <select name="param4" id="param4">
-                        <option value="param1">Param1</option>
-                        <option value="param2">Param2</option>
-                        <option value="param2">Param2</option>
-                        <option value="param3">Param3</option>
-                    </select>
+            <div class="buttons">
+                <button>Upload Dataset</button>
+                <button>Train Model</button>
             </div>
             <switch>
-                <input type="checkbox" id="tune_parameters" name="tune_parameters">
-                <label for="tune_parameters">Tune Hyperparameters</label>
+                <input type="checkbox" id="preprocess_data" name="preprocess_data">
+                <label for="preprocess_data">Regression</label>
             </switch>
-            <button>Upload Dataset</button>
-            <button>Train Model</button>
-            <button>Train Default Model</button>
         </div>
     </div>
 </body>
