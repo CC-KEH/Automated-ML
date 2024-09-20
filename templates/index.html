@@ -53,7 +53,10 @@
             align-items: center;
             flex-direction: column;
         }
-        
+        .buttons{
+            display: inline-flex;
+            margin: 10px;
+        }
         button{
             padding: 10px;
             background-color: transparent;
@@ -75,6 +78,14 @@
         switch > input[type="checkbox"] {
             accent-color: #6f7399;
             cursor: pointer;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        #fileName {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
         }
     </style>
 </head>
@@ -98,16 +109,54 @@
     </div>
     <div class="right_div">
         <div class="right_form">
+            <div id="fileName"></div>
             <div class="buttons">
-                <button>Upload Dataset</button>
-                <button>Train Model</button>
-            </div>
+            <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="dataset" id="fileInput" accept=".csv,.xlsx,.xls">
+                <button type="button" id="uploadButton">Upload Dataset</button>
+            </form>
+            <form id="trainForm" action="/train" method="POST">
+                <input type="hidden" name="is_regression" id="isRegression">
+                <button type="button" id="trainButton">Train Model</button>
+            </form>
+        </div>
             <switch>
                 <input type="checkbox" id="preprocess_data" name="preprocess_data">
                 <label for="preprocess_data">Regression</label>
             </switch>
         </div>
     </div>
-</body>
+    <script>
+        // Trigger file input when the custom button is clicked
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            document.getElementById('fileInput').click();
+        });
 
+        // Show the name of the selected file and prevent form submission
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const fileName = document.getElementById('fileInput').files[0].name;
+            document.getElementById('fileName').textContent = "Selected file: " + fileName;
+        });
+
+        // Handle form submission with regression checkbox value
+        document.getElementById('trainButton').addEventListener('click', function () {
+            // Check if a file has been selected
+            if (document.getElementById('fileInput').files.length > 0) {
+                // Check if regression checkbox is checked
+                const isRegression = document.getElementById('preprocess_data').checked ? 'true' : 'false';
+
+                // Set the hidden input's value to reflect the checkbox state
+                document.getElementById('isRegression').value = isRegression;
+
+                // First submit the file upload form
+                document.getElementById('uploadForm').submit();
+
+                // Then submit the train model form
+                document.getElementById('trainForm').submit();
+            } else {
+                alert('Please upload a dataset before training the model.');
+            }
+        });
+    </script>
+</body>
 </html>

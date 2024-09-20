@@ -1,61 +1,41 @@
-from doctest import debug
-from flask import Flask,render_template,request
+from flask import Flask, render_template, request, redirect, url_for
 import os
-import numpy as np
-from src.Project4.pipeline.prediction import PredictionPipeline
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+# Folder where uploaded files will be saved
+UPLOAD_FOLDER = 'uploads/'
+ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route('/',methods=['GET'])
+# Check if the file has an allowed extension
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/', methods=['GET'])
 def homepage():
     return render_template('index.html')
 
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'dataset' not in request.files:
+        return 'No file part'
+    file = request.files['dataset']
+    if file.filename == '':
+        return 'No selected file'
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return 'File uploaded successfully'
+    return 'Invalid file type'
 
-@app.route('/train',methods=['GET'])
+@app.route('/train', methods=['GET'])
 def train():
     os.system('python main.py')
     return 'Training Successful!'
 
-
-@app.route('/predict',methods=['GET','POST'])
-def predict():
-    if request.method=='POST':
-        try:
-            features = ['cp','thalachh','slp','restecg','exng','oldpeak','caa','thall','sex','age']
-            print("in the output route")
-            age = int(request.form['age'])
-            sex = int(request.form['sex'])
-            cp = int(request.form['cp'])
-            trtbps = int(request.form['trtbps'])
-            chol = int(request.form['chol'])
-            fbs = int(request.form['fbs'])
-            restecg = int(request.form['restecg'])
-            thalachh = int(request.form['thalachh'])
-            exng = int(request.form['exng'])
-            oldpeak = float(request.form['oldpeak'])
-            slp = int(request.form['slp'])
-            caa = int(request.form['caa'])
-            thall = int(request.form['thall'])
-            
-            data = [age,sex,cp,restecg,thalachh,exng,oldpeak,slp,caa,thall]
-            data = np.array(data).reshape(1,10)
-            
-            obj = PredictionPipeline()
-            predict = obj.predict(data=data)
-            if predict == 1:
-                predict = 'True'
-            else:
-                predict = 'False'
-            return render_template('result.html',prediction=str(predict))
-        
-        except Exception as e:
-            raise e
-    else:
-        # If request method is GET, render the prediction form
-        return render_template('prediction.html')
-
-
-if __name__=='__main__':
-    # app.run(host='0.0.0.0',port=8000,debug=True)
-    app.run(host="0.0.0.0",port=8000,debug=True)
+if __name__ == '__main__':
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+    app.run(host="0.0.0.0", port=8000, debug=True)
