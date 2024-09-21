@@ -1,5 +1,6 @@
 import os
 import zipfile
+import pandas as pd
 from src.AutoML.utils import logger
 from src.AutoML.entity.config_entity import Data_Ingestion_Config
 
@@ -15,19 +16,48 @@ class Data_Ingestion:
         with open(data_path,'wb') as f:
             f.write(zipped_data)
     
-    def initiate_data_ingestion(self, zipped_data):
-        ''' Initiates the data ingestion process
+    def check_zip_file(self):
+        ''' Checks if the file is a zip file
         '''
-        logger.info("Initiating Data Ingestion")
-        self.save_data_to_path(zipped_data)
-        self.extract_zip_data()
-        logger.info("Data Ingestion Completed")
-        
-    
+        for file in os.listdir('uploads/'):
+            if file.endswith('.zip'):
+                zipped_data = file
+                return zipped_data
+        return None
+
     def extract_zip_data(self):
         ''' Extracts the zip file
         '''
+        logger.info("Extracting data from zip file")
         unzip_path = self.config.unzip_dir
         os.makedirs(unzip_path,exist_ok=True)
         with zipfile.ZipFile(self.config.data_path,'r') as zip_ref:
             zip_ref.extractall(unzip_path)
+    
+    def convert_to_csv(self):
+        ''' If the data is in excel format or any other, converts it to csv
+        '''
+        logger.info("Converting data to csv format")
+        for file in os.listdir(self.config.unzip_dir):
+            if file.endswith('.csv'):
+                logger.info("Data is already in csv format")
+                return
+            elif file.endswith('.xlsx'):
+                logger.info("Converting xlsx file to csv")
+                data = pd.read_excel(os.path.join(self.config.unzip_dir,file))
+                data.to_csv(os.path.join(self.config.unzip_dir,file.split('.')[0]+'.csv'),index=False)
+            elif file.endswith('.xls'):
+                logger.info("Converting xls file to csv")
+                data = pd.read_excel(os.path.join(self.config.unzip_dir,file))
+                data.to_csv(os.path.join(self.config.unzip_dir,file.split('.')[0]+'.csv'),index=False)
+    
+    def initiate_data_ingestion(self):
+        ''' Initiates the data ingestion process
+        '''
+        logger.info("Initiating Data Ingestion")
+        zip_file = self.check_zip_file()
+        if zip_file:
+            self.save_data_to_path(zip_file)
+        self.extract_zip_data()
+        self.convert_to_csv()
+        logger.info("Data Ingestion Completed")

@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
+from sklearn.preprocessing import LabelEncoder
 
 
 class Data_Transformation:
@@ -77,7 +78,7 @@ class Data_Transformation:
 
     def initiate_data_transformation(self):
         """Initiates the complete data transformation process."""
-        logger.info("Initiating Regression Data Transformation")
+        logger.info("Initiating Data Transformation")
 
         # Count number of features
         feature_count = len(self.data.columns)
@@ -89,8 +90,17 @@ class Data_Transformation:
         
         categorical_features, object_features = self.get_categorical_features(object_features)
 
-        # Standardize numerical features
-        self.standardize_data(numerical_features)
+        # ! Might Cause Error
+        # Perform one-hot encoding on categorical features
+        encoder = LabelEncoder()
+        encoded_categories = encoder.fit_transform(self.data[categorical_features])
+        self.data = self.data.drop(categorical_features, axis=1)
+                
+        # Standardize the data
+        self.standardize_data()
+
+        # Combine the encoded categories with the data
+        self.data = pd.concat([self.data, encoded_categories], axis=1)
 
         # Perform feature selection and dimensionality reduction based on feature count
         if feature_count >= 30:
@@ -100,9 +110,6 @@ class Data_Transformation:
         if feature_count >= 20:
             logger.info("Feature count is greater than 20, reducing dimensionality using PCA")
             self.reduce_dimensionality()
-
-        # Standardize the final data
-        self.standardize_data()
 
         # Save the transformed data
         self.split_and_save_data()
