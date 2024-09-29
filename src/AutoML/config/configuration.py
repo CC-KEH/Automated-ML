@@ -13,8 +13,8 @@ class Configuration_Manager:
         create_directories([config.root_dir])
         data_ingestion_config = Data_Ingestion_Config(
             root_dir=config.root_dir,
-            data_path=config.local_data_file,
-            unzip_path=config.unzip_dir
+            data_path=config.data_path,
+            source_path = config.source_path
         )
         return data_ingestion_config
 

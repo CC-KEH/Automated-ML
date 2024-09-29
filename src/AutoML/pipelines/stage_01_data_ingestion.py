@@ -10,11 +10,11 @@ class DataIngestionTrainingPipeline:
     def __init__(self):
         pass
 
-    def main(self, zipped_data):
+    def main(self):
         config = Configuration_Manager()
         data_ingestion_config = config.get_data_ingestion_config()
         data_ingestion = Data_Ingestion(config=data_ingestion_config)
-        data_ingestion.initiate_data_ingestion(zipped_data)
+        data_ingestion.initiate_data_ingestion()
 
 if __name__ == "__main__":
     try:

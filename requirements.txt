@@ -1,1 +1,13 @@
 flask
+joblib
+python-box
+notebook
+numpy
+scikit-learn
+matplotlib
+mlflow
+types-pyYAML
+Flask-Cors
+pyYAML
+ensure
+imbalanced-learn

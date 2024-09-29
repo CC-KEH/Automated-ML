@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 from src.AutoML.utils import logger
 from src.AutoML.entity.config_entity import Data_Transformation_Config
@@ -9,7 +10,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
-from imblearn.under_sampling import RandomUnderSampler
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -17,7 +17,6 @@ class Data_Transformation:
     def __init__(self, config: Data_Transformation_Config):
         """Initializes the regression data transformation with config settings."""
         self.config = config
-        self.data = pd.read_csv(self.config.data_path)  # Load data from CSV
         self.max_allowed_features = 10
         self.max_selected_features = 20
         self.pca_components = 10
@@ -79,7 +78,11 @@ class Data_Transformation:
     def initiate_data_transformation(self):
         """Initiates the complete data transformation process."""
         logger.info("Initiating Data Transformation")
-
+       
+        self.data = pd.read_csv(self.config.data_path)
+        self.target = self.data['target']
+        self.data = self.data.drop('target', axis=1)
+        
         # Count number of features
         feature_count = len(self.data.columns)
         
@@ -89,19 +92,25 @@ class Data_Transformation:
         numerical_features, object_features = self.get_features()
         
         categorical_features, object_features = self.get_categorical_features(object_features)
-
-        # ! Might Cause Error
-        # Perform one-hot encoding on categorical features
-        encoder = LabelEncoder()
-        encoded_categories = encoder.fit_transform(self.data[categorical_features])
-        self.data = self.data.drop(categorical_features, axis=1)
+        
+        if categorical_features:
+            # ! Might Cause Error
+            # Perform one-hot encoding on categorical features
+            encoder = LabelEncoder()
+            encoded_categories = encoder.fit_transform(self.data[categorical_features])
+            self.data = self.data.drop(categorical_features, axis=1)
                 
-        # Standardize the data
-        self.standardize_data()
+            # Standardize the data
+            self.standardize_data()
 
-        # Combine the encoded categories with the data
-        self.data = pd.concat([self.data, encoded_categories], axis=1)
-
+            # Combine the encoded categories with the data
+            self.data = pd.concat([self.data, encoded_categories], axis=1)
+        
+        else:
+            self.standardize_data()
+        
+        self.data['target'] = self.target
+        
         # Perform feature selection and dimensionality reduction based on feature count
         if feature_count >= 30:
             logger.info("Feature count is greater than 30, selecting top 10 features using correlation")

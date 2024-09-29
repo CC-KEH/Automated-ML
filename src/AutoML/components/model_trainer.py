@@ -1,4 +1,5 @@
 import joblib
+import pandas as pd
 from src.AutoML.utils import logger
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
@@ -6,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC, SVR
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-from sklearn.mode_selection import GridSearchCV, train_test_split
+from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score, f1_score, precision_score, recall_score
 
 from src.AutoML.config.configuration import Configuration_Manager
@@ -14,7 +15,7 @@ from src.AutoML.entity.config_entity import Model_Trainer_Config
 
 class Regression_Model_Trainer:
     def __init__(self,config: Model_Trainer_Config) -> None:
-        self.config, self.params = config
+        self.config = config
         self.models = {
             'LinearRegression': LinearRegression(),
             'Ridge': Ridge(),
@@ -24,11 +25,14 @@ class Regression_Model_Trainer:
             'RandomForestRegressor': RandomForestRegressor(),
             'SVR': SVR()
         }
-        self.X_train, self.X_val, 
-        self.y_train, self.y_val = train_test_split(
-            self.X_train, self.y_train, 
-            test_size=self.config['test_size'], 
-            random_state=self.config['random_state']
+        self.train_data = pd.read_csv(self.config.train_path)
+        self.y = self.train_data['target']
+        self.x = self.train_data.drop(columns=['target'])
+        
+        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(
+            self.x,self.y, 
+            test_size=0.2, 
+            random_state=42
         )
         self.best_model = None
         
@@ -41,9 +45,14 @@ class Regression_Model_Trainer:
         }
     
     def fine_tune_hyperparameters(self, model):
-        gs = GridSearchCV(model, self.params[model], cv=5, n_jobs=-1)
+        params_grid = getattr(self.config.params, model)
+        gs = GridSearchCV(model, param_grid=params_grid)
         gs.fit(self.X_train, self.y_train)
-        return gs.best_estimator_
+        logger.info(f'Finetuning {model} model')
+        logger.info(f'Best Parameters for {model}: {gs.best_params_}')
+        logger.info(f'Best Score for {model}: {gs.best_score_}')
+        finetuned_model = model.set_params(**gs.best_params_)
+        return finetuned_model
     
     def finetune_and_save_model(self, model, model_name):
         best_estimator = self.fine_tune_hyperparameters(model)
@@ -72,7 +81,7 @@ class Regression_Model_Trainer:
         
 class Classification_Model_Trainer:
     def __init__(self) -> None:
-        self.config, self.params = Configuration_Manager().get_classification_model_trainer_config()
+        self.config = Configuration_Manager().get_classification_model_trainer_config()
         self.models = {
             'LogisticRegression': LogisticRegression(),
             'DecisionTreeClassifier': DecisionTreeClassifier(),
@@ -81,11 +90,14 @@ class Classification_Model_Trainer:
             'GaussianNB': GaussianNB(),
             'KNeighborsClassifier': KNeighborsClassifier()
         }
-        self.X_train, self.X_val,
-        self.y_train, self.y_val = train_test_split(
-            self.X_train, self.y_train, 
-            test_size=self.config['test_size'], 
-            random_state=self.config['random_state']
+        self.train_data = pd.read_csv(self.config.train_path)
+        self.y = self.train_data['target']
+        self.x = self.train_data.drop(columns=['target'])
+        
+        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(
+            self.x,self.y, 
+            test_size=0.2, 
+            random_state=42
         )
         self.best_model = None
     
@@ -98,9 +110,14 @@ class Classification_Model_Trainer:
         }
     
     def fine_tune_hyperparameters(self, model):
-        gs = GridSearchCV(model, self.params[model], cv=5, n_jobs=-1)
+        params_grid = getattr(self.config.params, model)
+        gs = GridSearchCV(model, param_grid=params_grid)
         gs.fit(self.X_train, self.y_train)
-        return gs.best_estimator_, gs.best_params_
+        logger.info(f'Finetuning {model} model')
+        logger.info(f'Best Parameters for {model}: {gs.best_params_}')
+        logger.info(f'Best Score for {model}: {gs.best_score_}')
+        finetuned_model = model.set_params(**gs.best_params_)
+        return finetuned_model
     
     def finetune_and_save_model(self, model, model_name):
         best_estimator = self.fine_tune_hyperparameters(model)

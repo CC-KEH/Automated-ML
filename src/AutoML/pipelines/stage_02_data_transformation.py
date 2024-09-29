@@ -8,7 +8,7 @@ class DataTransformationTrainingPipeline:
     def __init__(self):
         pass
     
-    def main(self, mode='regression'):    
+    def main(self):    
         try:
             config = Configuration_Manager()
             data_transformation_config = config.get_data_transformation_config()

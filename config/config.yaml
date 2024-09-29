@@ -1,9 +1,9 @@
-artifacts: artifacts
+artifacts_root: artifacts
 
 data_ingestion:
   root_dir: artifacts/data_ingestion
-  data_path: artifacts/data_ingestion/data.zip
-  unzip_path: artifacts/data_ingestion/data.csv
+  source_path: uploads
+  data_path: artifacts/data_ingestion/data.csv
 
 data_transformation:
   root_dir: artifacts/data_transformation
@@ -11,7 +11,7 @@ data_transformation:
   train_path: artifacts/data_transformation/train.csv
   test_path: artifacts/data_transformation/test.csv
 
-model_training:
+model_trainer:
   root_dir: artifacts/model_trainer
   train_path: artifacts/data_transformation/train.csv
   
