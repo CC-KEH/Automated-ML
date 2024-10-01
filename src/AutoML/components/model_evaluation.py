@@ -21,7 +21,7 @@ class Regression_Model_Evaluation:
         return mae,mse,r2
     
     def log_into_mlflow(self):
-        test_data = pd.read_csv(self.config.test_data_path)
+        test_data = pd.read_csv(self.config.test_path)
         model = joblib.load(self.config.model_path)
         X_test = test_data.drop([self.config.target_column],axis=1)
         y_test  = test_data[[self.config.target_column]]
@@ -65,7 +65,7 @@ class Classification_Model_Evaluation:
         return accuracy,f1,precision,recall
 
     def log_into_mlflow(self):
-        test_data = pd.read_csv(self.config.test_data_path)
+        test_data = pd.read_csv(self.config.test_path)
         model = joblib.load(self.config.model_path)
         X_test = test_data.drop([self.config.target_column],axis=1)
         y_test  = test_data[[self.config.target_column]]

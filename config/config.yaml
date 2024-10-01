@@ -3,7 +3,7 @@ artifacts_root: artifacts
 data_ingestion:
   root_dir: artifacts/data_ingestion
   source_path: uploads
-  data_path: artifacts/data_ingestion/data.csv
+  data_path: artifacts/data_ingestion
 
 data_transformation:
   root_dir: artifacts/data_transformation
@@ -18,5 +18,5 @@ model_trainer:
 model_evaluation:
   root_dir: artifacts/model_evaluation
   test_path: artifacts/data_transformation/test.csv
-  model_path: artifacts/model_trainer/model.joblib
+  model_path: artifacts/model_trainer/model.pkl
   metric_file_name: artifacts/model_evaluation/metrics.json

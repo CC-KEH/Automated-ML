@@ -1,190 +1,123 @@
-Classification:
-  LogisticRegression:
-    penalty:
-      - l1
-      - l2
-    C:
-      - 0.1
-      - 0.5
-      - 1.0
-    solver:
-      - newton-cg
-      - lbfgs
-      - liblinear
-      - sag
+LinearRegression:
+  fit_intercept:
+    - True
+    - False
+  normalize:
+    - True
+    - False
+  copy_X:
+    - True
+    - False
+DecisionTreeRegressor:
+  criterion: 
+    - "mse"
+    - "friedman_mse"
+  max_depth: 
+    - 6
+    - 8
+    - 10
+RandomForestRegressor:
+  n_estimators: 
+    - 100
+    - 200
+    - 300
+  max_depth: 
+    - None
+    - 5
+    - 10
+  min_samples_split: 
+    - 2
+    - 5
+    - 10
+  min_samples_leaf: 
+    - 1
+    - 2
+    - 4
+ElasticNet:
+  alpha:
+    - 0.1
+    - 0.5
+    - 1.0
+  l1_ratio:
+    - 0.1
+    - 0.5
+    - 1.0
+  fit_intercept:
+    - True
+    - False
+  normalize:
+    - True
+    - False
+SVR:
+  C:
+    - 0.1
+    - 1
+    - 10
+  kernel: 
+    - linear
+    - rbf
+  gamma: 
+    - 0.1
+    - 0.01
+    - 0.001
 
-
-  GaussianNB:
-    var_smoothing:
-      - 1e-9
-      - 1e-8
-      - 1e-7
-
-  KNeighborsClassifier:
-    n_neighbors: 
-      - 3
-      - 5
-      - 7
-
-  DecisionTreeClassifier:
-    criterion: 
-      - "gini"
-      - "entropy"
-    max_depth: 
-      - 6
-      - 8
-      - 10
-
-  RandomForestClassifier:
-    n_estimators: 
-      - 100
-      - 200
-      - 300
-    max_depth: 
-      - None
-      - 5
-      - 10
-    min_samples_split: 
-      - 2
-      - 5
-      - 10
-    min_samples_leaf: 
-      - 1
-      - 2
-      - 4
-
-  SVC:
-    C:
-      - 0.1
-      - 1
-      - 10
-    kernel: 
-      - linear
-      - rbf
-    gamma: 
-      - 0.1
-      - 0.01
-      - 0.001
-
-  GradientBoostingClassifier:
-    n_estimators:
-      - 50
-      - 100
-      - 150
-    criterion:
-      - friedman_mse
-      - mse
-      - mae
-
-Regression:
-  LinearRegression:
-    fit_intercept:
-      - True
-      - False
-    normalize:
-      - True
-      - False
-    copy_X:
-      - True
-      - False
-
-  DecisionTreeRegressor:
-    criterion: 
-      - "mse"
-      - "friedman_mse"
-    max_depth: 
-      - 6
-      - 8
-      - 10
-
-  RandomForestRegressor:
-    n_estimators: 
-      - 100
-      - 200
-      - 300
-    max_depth: 
-      - None
-      - 5
-      - 10
-    min_samples_split: 
-      - 2
-      - 5
-      - 10
-    min_samples_leaf: 
-      - 1
-      - 2
-      - 4
-
-  GradientBoostingRegressor:
-    n_estimators:
-      - 50
-      - 100
-      - 150
-    criterion:
-      - friedman_mse
-      - mse
-      - mae
-
-  Lasso:
-    alpha:
-      - 0.1
-      - 0.5
-      - 1.0
-    fit_intercept:
-      - True
-      - False
-    normalize:
-      - True
-      - False
-
-  Ridge:
-    alpha:
-      - 0.1
-      - 0.5
-      - 1.0
-    fit_intercept:
-      - True
-      - False
-    normalize:
-      - True
-      - False
-
-  ElasticNet:
-    alpha:
-      - 0.1
-      - 0.5
-      - 1.0
-    l1_ratio:
-      - 0.1
-      - 0.5
-      - 1.0
-    fit_intercept:
-      - True
-      - False
-    normalize:
-      - True
-      - False
-
-  SVR:
-    C:
-      - 0.1
-      - 1
-      - 10
-    kernel: 
-      - linear
-      - rbf
-    gamma: 
-      - 0.1
-      - 0.01
-      - 0.001
-
-  KNeighborsRegressor:
-    n_neighbors: 
-      - 3
-      - 5
-      - 7
-
-  GaussianProcessRegressor:
-    n_restarts_optimizer:
-      - 0
-      - 1
+LogisticRegression:
+  penalty:
+    - l1
+    - l2
+  C:
+    - 0.1
+    - 0.5
+    - 1.0
+  solver:
+    - newton-cg
+    - lbfgs
+    - liblinear
+    - sag
+GaussianNB:
+  var_smoothing:
+    - 1e-9
+    - 1e-8
+    - 1e-7
+KNeighborsClassifier:
+  n_neighbors: 
+    - 3
+    - 5
+    - 7
+DecisionTreeClassifier:
+  criterion: 
+    - "gini"
+    - "entropy"
+  max_depth: 
+    - 6
+    - 8
+    - 10
+RandomForestClassifier:
+  n_estimators: 
+    - 100
+    - 200
+    - 300
+  max_depth: 
+    - None
+    - 5
+    - 10
+  min_samples_split: 
+    - 2
+    - 5
+    - 10
+  min_samples_leaf: 
+    - 1
+    - 2
+    - 4
+SVC:
+  C:
+    - 0.1
+    - 1
+    - 10
+  kernel: 
+    - linear
+    - rbf
+  gamma: 
+    - 0.1
+    - 0.01
+    - 0.001

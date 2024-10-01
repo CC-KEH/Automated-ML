@@ -1,3 +1,4 @@
+import pandas as pd
 from src.AutoML.utils.common import logger
 from src.AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation 
 from src.AutoML.config.configuration import Configuration_Manager
@@ -8,7 +9,13 @@ class ModelEvaluationTrainingPipeline:
     def __init__(self):
         pass
     
-    def main(self, mode='regression'):    
+    def main(self):
+        data = pd.read_csv('artifacts/data_transformation/test.csv')
+        if data['target'].dtype == 'float64':
+            mode = 'regression'
+        else:
+            mode = 'classification'
+            
         try:
             if mode == 'regression':
                 config = Configuration_Manager()
