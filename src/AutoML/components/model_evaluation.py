@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from pathlib import Path
 import mlflow
@@ -22,9 +23,11 @@ class Regression_Model_Evaluation:
     
     def log_into_mlflow(self):
         test_data = pd.read_csv(self.config.test_path)
-        model = joblib.load(self.config.model_path)
-        X_test = test_data.drop([self.config.target_column],axis=1)
-        y_test  = test_data[[self.config.target_column]]
+        models = os.listdir(self.config.model_path)
+        model = models[0]
+        model = joblib.load(os.path.join(self.config.model_path,model))
+        X_test = test_data.drop(['target'],axis=1)
+        y_test  = test_data[['target']]
         
         mlflow.set_registry_uri(self.config.mlflow_uri)
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
@@ -66,9 +69,11 @@ class Classification_Model_Evaluation:
 
     def log_into_mlflow(self):
         test_data = pd.read_csv(self.config.test_path)
-        model = joblib.load(self.config.model_path)
-        X_test = test_data.drop([self.config.target_column],axis=1)
-        y_test  = test_data[[self.config.target_column]]
+        models = os.listdir(self.config.model_path)
+        model = models[0]
+        model = joblib.load(os.path.join(self.config.model_path, model))
+        X_test = test_data.drop(['target'],axis=1)
+        y_test  = test_data[['target']]
         
         mlflow.set_registry_uri(self.config.mlflow_uri)
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
@@ -96,4 +101,3 @@ class Classification_Model_Evaluation:
     
     def initiate_model_evaluation(self):
         self.log_into_mlflow()
-    
