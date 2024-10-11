@@ -1,7 +1,7 @@
 import pandas as pd
-from src.AutoML.utils.common import logger
-from src.AutoML.components.model_trainer import Regression_Model_Trainer, Classification_Model_Trainer 
-from src.AutoML.config.configuration import Configuration_Manager
+from AutoML.utils.main_utils import logger
+from AutoML.components.model_trainer import Regression_Model_Trainer, Classification_Model_Trainer 
+from AutoML.config.configuration import Configuration_Manager
 
 STAGE_NAME = 'Model Trainer Stage'
 

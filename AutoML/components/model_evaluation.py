@@ -8,8 +8,8 @@ from sklearn.metrics import (accuracy_score, mean_squared_error, mean_absolute_e
                              r2_score, f1_score, precision_score, recall_score)
 
 from urllib.parse import urlparse
-from src.AutoML.entity.config_entity import Model_Evaluation_Config
-from src.AutoML.utils.common import save_json
+from AutoML.entity.config_entity import Model_Evaluation_Config
+from AutoML.utils.main_utils import save_json
 
 class Regression_Model_Evaluation:
     def __init__(self,config:Model_Evaluation_Config):

@@ -2,8 +2,8 @@ import os
 import shutil
 import zipfile
 import pandas as pd
-from src.AutoML.utils import logger
-from src.AutoML.entity.config_entity import Data_Ingestion_Config
+from AutoML.utils import logger
+from AutoML.entity.config_entity import Data_Ingestion_Config
 
 class Data_Ingestion:
     def __init__(self,config: Data_Ingestion_Config):

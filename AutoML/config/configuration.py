@@ -1,6 +1,6 @@
-from src.AutoML.constants import *
-from src.AutoML.entity.config_entity import *
-from src.AutoML.utils.common import read_yaml,create_directories
+from AutoML.constants import *
+from AutoML.entity.config_entity import *
+from AutoML.utils.main_utils import read_yaml,create_directories
 
 class Configuration_Manager:
     def __init__(self, configs_path=CONFIG_PATH, params_path=PARAMS_PATH):

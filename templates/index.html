@@ -111,19 +111,15 @@
         <div class="right_form">
             <div id="fileName"></div>
             <div class="buttons">
-            <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
-                <input type="file" name="dataset" id="fileInput" accept=".csv,.xlsx,.xls">
-                <button type="button" id="uploadButton">Upload Dataset</button>
-            </form>
-            <form id="trainForm" action="/train" method="POST">
-                <input type="hidden" name="is_regression" id="isRegression">
-                <button type="button" id="trainButton">Train Model</button>
-            </form>
-        </div>
-            <switch>
-                <input type="checkbox" id="preprocess_data" name="preprocess_data">
-                <label for="preprocess_data">Regression</label>
-            </switch>
+                <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="dataset" id="fileInput" accept=".csv,.xlsx,.xls">
+                    <button type="button" id="uploadButton">Upload Dataset</button>
+                </form>
+                <form id="trainForm" action="/train" method="POST">
+                    <input type="hidden" name="is_regression" id="isRegression">
+                    <button type="button" id="trainButton">Train Model</button>
+                </form>
+            </div>
         </div>
     </div>
     <script>
@@ -142,17 +138,13 @@
         document.getElementById('trainButton').addEventListener('click', function () {
             // Check if a file has been selected
             if (document.getElementById('fileInput').files.length > 0) {
-                // Check if regression checkbox is checked
-                const isRegression = document.getElementById('preprocess_data').checked ? 'true' : 'false';
-
-                // Set the hidden input's value to reflect the checkbox state
-                document.getElementById('isRegression').value = isRegression;
-
                 // First submit the file upload form
                 document.getElementById('uploadForm').submit();
-
-                // Then submit the train model form
-                document.getElementById('trainForm').submit();
+                
+                // Delay the model training form submission to allow file upload
+                setTimeout(function () {
+                    document.getElementById('trainForm').submit();
+                }, 1000);
             } else {
                 alert('Please upload a dataset before training the model.');
             }

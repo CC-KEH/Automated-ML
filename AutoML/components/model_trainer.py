@@ -1,6 +1,6 @@
 import joblib
 import pandas as pd
-from src.AutoML.utils import logger
+from AutoML.utils import logger
 from sklearn.linear_model import LinearRegression, LogisticRegression, ElasticNet
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -10,8 +10,8 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score, f1_score, precision_score, recall_score
 
-from src.AutoML.config.configuration import Configuration_Manager
-from src.AutoML.entity.config_entity import Model_Trainer_Config
+from AutoML.config.configuration import Configuration_Manager
+from AutoML.entity.config_entity import Model_Trainer_Config
 
 class Regression_Model_Trainer:
     def __init__(self,config: Model_Trainer_Config) -> None:

@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from src.AutoML.utils import logger
-from src.AutoML.entity.config_entity import Data_Transformation_Config
+from AutoML.utils import logger
+from AutoML.entity.config_entity import Data_Transformation_Config
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split

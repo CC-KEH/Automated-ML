@@ -21,18 +21,24 @@ def homepage():
 def upload_file():
     if 'dataset' not in request.files:
         return 'No file part'
+    
     file = request.files['dataset']
+    
     if file.filename == '':
         return 'No selected file'
+    
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return 'File uploaded successfully'
+        
+        os.system('python main.py')
+    
     return 'Invalid file type'
 
-@app.route('/train', methods=['GET'])
+@app.route('/train', methods=['POST'])
 def train():
-    os.system('python main.py')
+    # Simulate training by calling an external script
+    os.system('python main.py')  # Assuming this is your training script
     return 'Training Successful!'
 
 if __name__ == '__main__':

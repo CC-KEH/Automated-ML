@@ -1,7 +1,7 @@
 import pandas as pd
-from src.AutoML.utils.common import logger
-from src.AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation 
-from src.AutoML.config.configuration import Configuration_Manager
+from AutoML.utils.main_utils import logger
+from AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation 
+from AutoML.config.configuration import Configuration_Manager
 
 STAGE_NAME = 'Model Evaluation Stage'
 
