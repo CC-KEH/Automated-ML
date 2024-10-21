@@ -41,6 +41,21 @@ def train():
     os.system('python main.py')  # Assuming this is your training script
     return 'Training Successful!'
 
+@app.route('manual_config',methods=['GET'])
+def manual_config():
+    return render_template('manual.html')
+
+@app.route('/manual_train', methods=['POST'])
+def train():
+    # Simulate training by calling an external script
+    algorithm_name = request.form['algorithm']
+    hyperparameters = request.form['hyperparameters']
+    print(algorithm_name, hyperparameters)
+    # Call manual.py with the algorithm name and hyperparameters
+    os.system(f'python manual.py {algorithm_name} {hyperparameters}')
+    
+    return 'Manual Training Successful!'
+
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)

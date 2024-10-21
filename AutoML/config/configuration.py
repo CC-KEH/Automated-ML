@@ -14,7 +14,10 @@ class Configuration_Manager:
         data_ingestion_config = Data_Ingestion_Config(
             root_dir=config.root_dir,
             data_path=config.data_path,
-            source_path = config.source_path
+            source_path = config.source_path,
+            database_name=config.database_name,
+            collection_name=config.collection_name,
+            connection_url=config.connection_url
         )
         return data_ingestion_config
 

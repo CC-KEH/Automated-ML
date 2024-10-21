@@ -4,6 +4,9 @@ data_ingestion:
   root_dir: artifacts/data_ingestion
   source_path: uploads
   data_path: artifacts/data_ingestion
+  database_name: AutoML_Database
+  collection_name: AutoML_Collection
+  connection_url: ""
 
 data_transformation:
   root_dir: artifacts/data_transformation

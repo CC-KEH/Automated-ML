@@ -35,7 +35,6 @@ def read_yaml(path_to_yaml: Path) -> ConfigBox:
     except Exception as e:
         raise e
 
-
 @ensure_annotations
 def create_directories(path_to_directories: list, verbose=True):
     '''
@@ -49,7 +48,6 @@ def create_directories(path_to_directories: list, verbose=True):
         if verbose:
             logger.info(f'Created directory at: {path}')
 
-
 @ensure_annotations
 def save_json(path: Path, data: dict):
     ''' save json data
@@ -61,7 +59,6 @@ def save_json(path: Path, data: dict):
         json.dump(data, file, indent=4)
 
     logger.info(f'Json file saved at: {path}')
-
 
 @ensure_annotations
 def load_json(path: Path) -> ConfigBox:
@@ -75,14 +72,12 @@ def load_json(path: Path) -> ConfigBox:
     logger.info(f'Json file loaded from: {path}')
     return ConfigBox(content)
 
-
 @ensure_annotations
 def save_bin(path: Path, data: Any):
     '''Save Binary File
     '''
     joblib.dump(value=data, filename=path)
     logger.info(f'Saved binary file at: {path}')
-
 
 @ensure_annotations
 def load_bin(path: Path) -> Any:
@@ -91,7 +86,6 @@ def load_bin(path: Path) -> Any:
     data = joblib.load(path)
     logger.info(f'Successfully loaded binary file from: {path}')
     return data
-
 
 @ensure_annotations
 def get_size(path: Path) -> str:

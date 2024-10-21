@@ -1,7 +1,7 @@
 import os
 import shutil
-import zipfile
 import pandas as pd
+import pymongo
 from AutoML.utils import logger
 from AutoML.entity.config_entity import Data_Ingestion_Config
 
@@ -43,10 +43,27 @@ class Data_Ingestion:
                 data = pd.read_excel(os.path.join(self.config.data_path,file))
                 data.to_csv(os.path.join(self.config.data_path,file.split('.')[0]+'.csv'),index=False)
     
+    def store_to_mongo(self):
+        client = pymongo.MongoClient(self.config.connection_url)
+        db = client[self.config.database_name]
+        collection = db[self.config.collection_name]
+        data = pd.read_csv(self.config.data_path)
+        records = data.to_dict(orient='records')
+        collection.insert_many(records)
+        logger.info("Data stored in MongoDB")
+        
+    def fetch_data_from_mongo(self):
+        client = pymongo.MongoClient(self.config.connection_url)
+        db = client[self.config.database_name]
+        collection = db[self.config.collection_name]
+        data = pd.DataFrame(list(collection.find()))
+        return data
+    
     def initiate_data_ingestion(self):
         ''' Initiates the data ingestion process
         '''
         logger.info("Initiating Data Ingestion")
         self.save_data_to_path()
+        self.store_to_mongo()
         # self.convert_to_csv()
         logger.info("Data Ingestion Completed")

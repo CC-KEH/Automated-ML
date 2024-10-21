@@ -111,43 +111,31 @@
         <div class="right_form">
             <div id="fileName"></div>
             <div class="buttons">
-                <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+                <form id="uploadForm" action="/train" method="POST" enctype="multipart/form-data">
                     <input type="file" name="dataset" id="fileInput" accept=".csv,.xlsx,.xls">
-                    <button type="button" id="uploadButton">Upload Dataset</button>
+                    <button type="button" id="autoTrainButton">Automatically Train</button>
                 </form>
-                <form id="trainForm" action="/train" method="POST">
-                    <input type="hidden" name="is_regression" id="isRegression">
-                    <button type="button" id="trainButton">Train Model</button>
+                <form id="manualForm" action="/manual_config" method="GET">
+                    <button type="submit" id="manualTrainButton">Manually Configure</button>
                 </form>
             </div>
         </div>
     </div>
     <script>
-        // Trigger file input when the custom button is clicked
-        document.getElementById('uploadButton').addEventListener('click', function () {
-            document.getElementById('fileInput').click();
-        });
-
-        // Show the name of the selected file and prevent form submission
-        document.getElementById('fileInput').addEventListener('change', function () {
-            const fileName = document.getElementById('fileInput').files[0].name;
-            document.getElementById('fileName').textContent = "Selected file: " + fileName;
-        });
-
-        // Handle form submission with regression checkbox value
-        document.getElementById('trainButton').addEventListener('click', function () {
-            // Check if a file has been selected
+        // Trigger file input when the Automatically Train button is clicked
+        document.getElementById('autoTrainButton').addEventListener('click', function () {
             if (document.getElementById('fileInput').files.length > 0) {
-                // First submit the file upload form
+                // Submit the upload form to the /train route if a file is selected
                 document.getElementById('uploadForm').submit();
-                
-                // Delay the model training form submission to allow file upload
-                setTimeout(function () {
-                    document.getElementById('trainForm').submit();
-                }, 1000);
             } else {
                 alert('Please upload a dataset before training the model.');
             }
+        });
+
+        // Show the name of the selected file
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const fileName = document.getElementById('fileInput').files[0].name;
+            document.getElementById('fileName').textContent = "Selected file: " + fileName;
         });
     </script>
 </body>
