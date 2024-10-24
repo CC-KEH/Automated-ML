@@ -11,16 +11,21 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('bg.jpg') no-repeat center center fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #030303;
+            color: #fff;
+            background-image: url("static/blob.svg");
             background-size: cover;
         }
 
         h1 {
             font-size: 50px;
             margin: 0 0 10px 0;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin-bottom: 20px;
+            background: -webkit-linear-gradient(#baaaf0, #8793ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         p {
@@ -34,18 +39,19 @@
             height: 100%;
         }
 
-        .info_div{
+        .info_div {
             padding: 10px;
             height: 50%;
         }
 
-        .right_div{
+        .right_div {
             position: absolute;
             right: 0;
             width: 50%;
             height: 100%;
         }
-        .right_form{
+
+        .right_form {
             padding: 10px;
             height: 90%;
             display: flex;
@@ -53,35 +59,43 @@
             align-items: center;
             flex-direction: column;
         }
-        .buttons{
+
+        .buttons {
             display: inline-flex;
             margin: 10px;
         }
-        button{
-            padding: 10px;
-            background-color: transparent;
-            color: black;
-            cursor: pointer;
+
+        button {
             border-radius: 4px;
-            height: 40px;
-            border-width: 1px;
-            margin: 12px;
+            padding: 0 16px;
+            height: 30px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: 2px solid #8793ff;
+            margin-right: 16px;
+            transition: background-color 200ms;
         }
-        button:hover{
+
+        button:hover {
             background-color: #6f7399;
             color: #fff;
         }
-        button:focus{
+
+        button:focus {
             background-color: #6f7399;
             color: #fff;
         }
-        switch > input[type="checkbox"] {
+
+        switch>input[type="checkbox"] {
             accent-color: #6f7399;
             cursor: pointer;
         }
+
         input[type="file"] {
             display: none;
         }
+
         #fileName {
             margin-top: 10px;
             font-size: 16px;

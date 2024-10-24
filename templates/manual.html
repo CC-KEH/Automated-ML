@@ -10,7 +10,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #030303; /* #101010 */
+            background-color: #030303;
+            /* #101010 */
             color: #fff;
         }
 
@@ -28,7 +29,7 @@
         .card {
             background-color: rgb(0, 0, 0);
             border-radius: 8px;
-            box-shadow: #56597d 0px 0px 0px 3px;
+            box-shadow: #8793ff 0px 0px 0px 3px;
             padding: 20px;
             padding-top: 10px;
             width: 20%;
@@ -64,14 +65,14 @@
             cursor: pointer;
             background-color: black;
             color: white;
-            border: 2px solid #56597d;
+            border: 2px solid #8793ff;
             margin-right: 16px;
             transition: background-color 200ms;
         }
 
         button {
             padding: 10px;
-            background-color: #6f7399;
+            background-color: #8793ff;
             color: #fff;
             cursor: pointer;
             border-radius: 4px;
@@ -81,7 +82,7 @@
         }
 
         button:hover {
-            background-color: #56597d;
+            background-color: #a3acff;
         }
 
         .button-group {
@@ -118,10 +119,11 @@
         <!-- Prediction Type -->
         <div>
             <label for="prediction-type">Prediction Type:</label>
-            <select id="prediction-type" style="background-color: black; width: 98.5%; border: 2px solid #56597d;"
+            <select id="prediction-type" style="background-color: black; width: 98.5%; border: 2px solid #8793ff;"
                 onchange="handlePredictionTypeChange()">
                 <option value="regression">Regression</option>
                 <option value="classification">Classification</option>
+                <option value="clustering">Clustering</option>
             </select>
         </div>
     </div>
@@ -204,12 +206,32 @@
         // Models and hyperparameters for regression and classification
         const regressionModels = {
             'Linear Regression': { hyperparameters: {} },
-            'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } }
+            'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } },
+            'Random Forest Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'Gradient Boosting Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'Support Vector Regressor': { hyperparameters: { kernel: 'text', C: 'number' } },
+            'K-Nearest Neighbors Regressor': { hyperparameters: { n_neighbors: 'number', weights: 'text' } },
+            'Decision Tree Regressor': { hyperparameters: { max_depth: 'number', criterion: 'text' } },
+            'Lasso Regressor': { hyperparameters: { alpha: 'number' } },
+            'Ridge Regressor': { hyperparameters: { alpha: 'number' } },
         };
 
         const classificationModels = {
             'Logistic Regression': { hyperparameters: { penalty: 'text', solver: 'text' } },
-            'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } }
+            'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'Gradient Boosting Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'Support Vector Classifier': { hyperparameters: { kernel: 'text', C: 'number' } },
+            'K-Nearest Neighbors Classifier': { hyperparameters: { n_neighbors: 'number', weights: 'text' } },
+            'Decision Tree Classifier': { hyperparameters: { max_depth: 'number', criterion: 'text' } },
+            'Lasso Classifier': { hyperparameters: { alpha: 'number' } },
+            'Ridge Classifier': { hyperparameters: { alpha: 'number' } },
+        };
+
+        const clusteringModels = {
+            'K-Means': { hyperparameters: { n_clusters: 'number' } },
+            'DBSCAN': { hyperparameters: { eps: 'number', min_samples: 'number' } },
+            'Agglomerative Clustering': { hyperparameters: { n_clusters: 'number' } },
+            'Mean Shift': { hyperparameters: { bandwidth: 'number' } },
         };
 
         let taskType = 'regression'; // Default task type is regression
@@ -225,7 +247,17 @@
             const algorithmSelect = document.getElementById('algorithm');
             algorithmSelect.innerHTML = ''; // Clear existing options
 
-            const models = taskType === 'regression' ? regressionModels : classificationModels;
+            // Select models based on task type (regression, classification, clustering)
+            let models;
+            if (taskType === 'regression') {
+                models = regressionModels;
+            } else if (taskType === 'classification') {
+                models = classificationModels;
+            } else if (taskType === 'clustering') {
+                models = clusteringModels;
+            }
+
+            // Populate the model dropdown
             for (let model in models) {
                 const option = document.createElement('option');
                 option.value = model;
@@ -236,10 +268,20 @@
             updateHyperparameters(); // Update hyperparameters on model change
         }
 
+
         // Update hyperparameters based on selected algorithm
         function updateHyperparameters() {
             const selectedAlgorithm = document.getElementById('algorithm').value;
-            const models = taskType === 'regression' ? regressionModels : classificationModels;
+
+            // Choose the right set of models based on task type
+            let models;
+            if (taskType === 'regression') {
+                models = regressionModels;
+            } else if (taskType === 'classification') {
+                models = classificationModels;
+            } else if (taskType === 'clustering') {
+                models = clusteringModels;
+            }
 
             const hyperparameterFields = document.getElementById('hyperparameter-fields');
             hyperparameterFields.innerHTML = ''; // Clear previous fields
