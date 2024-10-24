@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from AutoML.utils import logger
+from AutoML.logger import logger
 from AutoML.entity.config_entity import Data_Transformation_Config
 
 from sklearn.preprocessing import StandardScaler

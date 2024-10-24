@@ -1,6 +1,6 @@
 from AutoML.config.configuration import Configuration_Manager
 from AutoML.components.data_ingestion import Data_Ingestion
-from AutoML.utils.main_utils import logger
+from AutoML.logger import logger
 
 
 STAGE_NAME = 'Data Ingestion Stage'

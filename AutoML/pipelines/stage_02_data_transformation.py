@@ -1,4 +1,4 @@
-from AutoML.utils.main_utils import logger
+from AutoML.logger import logger
 from AutoML.components.data_transformation import Data_Transformation
 from AutoML.config.configuration import Configuration_Manager
 

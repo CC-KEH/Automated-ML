@@ -1,4 +1,4 @@
-from AutoML.utils import logger
+from AutoML.logger import logger
 from AutoML.pipelines.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from AutoML.pipelines.stage_02_data_transformation import DataTransformationTrainingPipeline
 from AutoML.pipelines.stage_03_model_trainer import ModelTrainerTrainingPipeline

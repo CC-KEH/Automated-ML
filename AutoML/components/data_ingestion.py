@@ -2,7 +2,7 @@ import os
 import shutil
 import pandas as pd
 import pymongo
-from AutoML.utils import logger
+from AutoML.logger import logger
 from AutoML.entity.config_entity import Data_Ingestion_Config
 
 class Data_Ingestion:

@@ -124,19 +124,21 @@
     <script>
         // Trigger file input when the Automatically Train button is clicked
         document.getElementById('autoTrainButton').addEventListener('click', function () {
-            if (document.getElementById('fileInput').files.length > 0) {
-                // Submit the upload form to the /train route if a file is selected
-                document.getElementById('uploadForm').submit();
-            } else {
-                alert('Please upload a dataset before training the model.');
-            }
+            // Open file explorer
+            document.getElementById('fileInput').click();
         });
 
-        // Show the name of the selected file
+        // Listen for file selection and submit the form automatically
         document.getElementById('fileInput').addEventListener('change', function () {
-            const fileName = document.getElementById('fileInput').files[0].name;
-            document.getElementById('fileName').textContent = "Selected file: " + fileName;
+            if (document.getElementById('fileInput').files.length > 0) {
+                const fileName = document.getElementById('fileInput').files[0].name;
+                document.getElementById('fileName').textContent = "Selected file: " + fileName;
+
+                // Submit the form after selecting the file
+                document.getElementById('uploadForm').submit();
+            }
         });
     </script>
 </body>
+
 </html>

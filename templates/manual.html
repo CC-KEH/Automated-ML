@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,313 +8,293 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
             margin: 0;
-            padding: 0;
-            height: 100vh;
+            padding: 20px;
+            background-color: #030303; /* #101010 */
+            color: #fff;
         }
 
-        h2 {
-            font-size: 40px;
-            margin: 0 0 10px 0;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 18px;
-            margin: 0 0 12px 0;
+        h1 {
+            margin-bottom: 36px;
         }
 
         .container {
             display: flex;
-            width: 100%;
-        }
-        .left-panel, .right-panel {
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .left-panel {
-            width: 40%;
-            max-width: 40%;
-            background-color: #f0f0f0;
-        }
-        .right-panel {
-            width: 50%;
-            padding-left: 30px;
-        }
-        h2 {
-            margin-top: 0;
-        }
-        select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        input{
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        #algorithm{
-            display: block;
-            width: 53%;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
-        .parameter-group {
-            margin-top: 20px;
-            width: 50%;
+        .card {
+            background-color: rgb(0, 0, 0);
+            border-radius: 8px;
+            box-shadow: #56597d 0px 0px 0px 3px;
+            padding: 20px;
+            padding-top: 10px;
+            width: 20%;
+            margin-right: 15px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #030303;
+            border-radius: 8px;
+            background-color: #101010;
+            color: #fff;
+        }
+
+        input[type="file"]::file-selector-button {
+            border-radius: 4px;
+            padding: 0 16px;
+            height: 30px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: 2px solid #56597d;
+            margin-right: 16px;
+            transition: background-color 200ms;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #6f7399;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+            height: 40px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #56597d;
         }
 
         .button-group {
-            margin-top: 30px;
+            margin-top: 20px;
+            text-align: center;
         }
-        button{
-            padding: 10px;
-            background-color: transparent;
-            color: black;
-            cursor: pointer;
-            border-radius: 4px;
-            height: 40px;
-            width: 150px;
-            border-width: 1px;
-            margin: 10px;
-            margin-left: 0px;
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
         }
-        button:hover{
-            background-color: #6f7399;
-            color: #fff;
-        }
-        button:focus{
-            background-color: #6f7399;
-            color: #fff;
-        }
-        switch > input[type="checkbox"] {
-            accent-color: #6f7399;
-            cursor: pointer;
+
+        .top-section div {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <!-- Left panel: Selected Algorithm Info -->
-    <div class="left-panel">
-        <h2>Selected Algorithm</h2>
-        <p><strong>Algorithm Name:</strong> <span id="algorithm-name">N/A</span></p>
-        <p><strong>Task Type:</strong> <span id="task-type">N/A</span></p>
-        <p><strong>Description:</strong> <span id="algorithm-description">Please select an algorithm from the right.</span></p>
-        <p><strong>Other Info:</strong> Depending on the selected model, additional information can be shown here.</p>
-    </div>
+    <h1>Machine Learning Model Configuration</h1>
 
-    <!-- Right panel: Model configuration -->
-    <div class="right-panel">
-        <h2>Configure Your Model</h2>
-
-        <!-- Algorithm Dropdown -->
-        <label for="algorithm">Algorithm:</label>
-        <select id="algorithm" onchange="updateHyperparameters()">
-        </select>
-
-        <!-- Hyperparameters Section -->
-        <div class="parameter-group" id="hyperparameter-fields">
+    <!-- Top section: Upload Dataset and Prediction Type -->
+    <div class="top-section">
+        <!-- Upload Dataset -->
+        <div>
+            <label for="upload-dataset">Upload Dataset:</label>
+            <input type="file" id="upload-dataset" style="background-color: #030303;">
         </div>
 
-        <!-- Button Group -->
-        <div class="button-group">
-            <button onclick="submitConfig()">Train</button>
+        <!-- Prediction Type -->
+        <div>
+            <label for="prediction-type">Prediction Type:</label>
+            <select id="prediction-type" style="background-color: black; width: 98.5%; border: 2px solid #56597d;"
+                onchange="handlePredictionTypeChange()">
+                <option value="regression">Regression</option>
+                <option value="classification">Classification</option>
+            </select>
         </div>
     </div>
-</div>
 
-<script>
-// Predefined algorithms for regression and classification
-const regressionModels = {
-    'Linear Regression': {
-        description: 'Linear Regression is used to predict continuous values.',
-        hyperparameters: {
-            'fit_intercept': 'checkbox',
-            'normalize': 'checkbox',
-            'copy_X': 'checkbox'
+    <!-- Main Container for Cards -->
+    <div class="container">
+
+        <!-- Data Ingestion Card -->
+        <div class="card">
+            <h3>Data Ingestion</h3>
+            <label for="source-type">Source:</label>
+            <select id="source-type">
+                <option value="local">Local</option>
+                <option value="mongo">MongoDB</option>
+            </select>
+            <p>The dataset will be ingested from the selected source.</p>
+        </div>
+
+        <!-- Data Transformation Card -->
+        <div class="card">
+            <h3>Data Transformation</h3>
+            <label for="transformation-type">Transformation Type:</label>
+            <select id="transformation-type" onchange="toggleTransformationOptions()">
+                <option value="auto">Auto</option>
+                <option value="manual">Manual</option>
+            </select>
+
+            <!-- Manual transformation options (hidden by default) -->
+            <div id="manual-options" style="display:none;">
+                <label for="train-numerical">Train on Numerical Features Only:</label>
+                <input type="checkbox" id="train-numerical">
+
+                <label for="dimension-reduction">Dimension Reduction:</label>
+                <select id="dimension-reduction">
+                    <option value="none">None</option>
+                    <option value="pca">PCA</option>
+                    <option value="lda">LDA</option>
+                </select>
+
+                <label for="encoding-type">Encoding Type:</label>
+                <select id="encoding-type">
+                    <option value="one-hot">One-Hot Encoding</option>
+                    <option value="label">Label Encoding</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Model Trainer Card -->
+        <div class="card">
+            <h3>Model Trainer</h3>
+            <label for="algorithm">Select Algorithm:</label>
+            <select id="algorithm" onchange="updateHyperparameters()">
+                <!-- Dynamically populated based on prediction type -->
+            </select>
+
+            <!-- Hyperparameters fields will be added here -->
+            <div id="hyperparameter-fields"></div>
+        </div>
+
+        <!-- Model Evaluation Card -->
+        <div class="card">
+            <h3>Model Evaluation</h3>
+            <label for="evaluation-metric">Evaluation Metric:</label>
+            <select id="evaluation-metric">
+                <option value="accuracy">Accuracy (Classification)</option>
+                <option value="f1-score">F1-Score (Classification)</option>
+                <option value="r2">R² Score (Regression)</option>
+                <option value="mse">Mean Squared Error (Regression)</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- Button to train model -->
+    <div class="button-group">
+        <button onclick="submitConfig()">Train Model</button>
+    </div>
+
+    <script>
+        // Models and hyperparameters for regression and classification
+        const regressionModels = {
+            'Linear Regression': { hyperparameters: {} },
+            'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } }
+        };
+
+        const classificationModels = {
+            'Logistic Regression': { hyperparameters: { penalty: 'text', solver: 'text' } },
+            'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } }
+        };
+
+        let taskType = 'regression'; // Default task type is regression
+
+        // Handle prediction type change
+        function handlePredictionTypeChange() {
+            taskType = document.getElementById('prediction-type').value;
+            populateAlgorithmOptions();
         }
-    },
-    'Elastic Net Regressor': {
-        description: 'Elastic Net is a linear regression model trained with L1 and L2 prior as regularizer.',
-        hyperparameters: {
-            'alpha': 'number',
-            'l1_ratio': 'number',
-            'max_iter': 'number',
-            'selection': 'text' // 'cyclic' or 'random'
+
+        // Populate algorithm options based on task type
+        function populateAlgorithmOptions() {
+            const algorithmSelect = document.getElementById('algorithm');
+            algorithmSelect.innerHTML = ''; // Clear existing options
+
+            const models = taskType === 'regression' ? regressionModels : classificationModels;
+            for (let model in models) {
+                const option = document.createElement('option');
+                option.value = model;
+                option.text = model;
+                algorithmSelect.add(option);
+            }
+
+            updateHyperparameters(); // Update hyperparameters on model change
         }
-    },
-    'Decision Tree Regressor': {
-        description: 'Decision Tree is a flowchart-like tree structure where an internal node represents a feature.',
-        hyperparameters: {
-            'criterion': 'text', // 'squared_error' , “friedman_mse”, “absolute_error”, “poisson”
-            'splitter': 'text', // 'best' or 'random'
-            'max_depth': 'number',
-            'min_samples_split': 'number',
-            'min_samples_leaf': 'number',
-            'max_features': 'text' // 'auto', 'sqrt', 'log2'
+
+        // Update hyperparameters based on selected algorithm
+        function updateHyperparameters() {
+            const selectedAlgorithm = document.getElementById('algorithm').value;
+            const models = taskType === 'regression' ? regressionModels : classificationModels;
+
+            const hyperparameterFields = document.getElementById('hyperparameter-fields');
+            hyperparameterFields.innerHTML = ''; // Clear previous fields
+
+            const hyperparameters = models[selectedAlgorithm].hyperparameters;
+            for (let param in hyperparameters) {
+                const label = document.createElement('label');
+                label.innerText = param;
+                const input = document.createElement('input');
+                input.type = hyperparameters[param];
+                input.id = param;
+                hyperparameterFields.appendChild(label);
+                hyperparameterFields.appendChild(input);
+            }
         }
-    },
-    'Random Forest Regressor': {
-        description: 'Random Forest is a versatile regression algorithm.',
-        hyperparameters: {
-            'n_estimators': 'number',
-            'criterion': 'text', // 'squared_error' , “friedman_mse”, “absolute_error”, “poisson”
-            'max_depth': 'number',
-            'random_state': 'number',
-            'max_features': 'text' // 'auto', 'sqrt', 'log2'
-        },
-        
-    },
-    'Support Vector Machine Regressor': {
-        description: 'Support Vector Machine is used for both regression and classification tasks.',
-        hyperparameters: {
-            'kernel': 'text', // 'linear', 'poly', 'rbf', 'sigmoid'
-            'C': 'number',
-            'gamma': 'number'
+
+        // Show/hide manual transformation options
+        function toggleTransformationOptions() {
+            const transformationType = document.getElementById('transformation-type').value;
+            const manualOptions = document.getElementById('manual-options');
+            manualOptions.style.display = (transformationType === 'manual') ? 'block' : 'none';
         }
-    }
-};
 
-const classificationModels = {
-    'Logistic Regression': {
-        description: 'Logistic Regression is used for binary or multi-class classification.',
-        hyperparameters: {
-            'C': 'number',
-            'penalty': 'text',
-            'solver': 'text'
+        // Handle form submission
+        function submitConfig() {
+            const selectedAlgorithm = document.getElementById('algorithm').value;
+            const evaluationMetric = document.getElementById('evaluation-metric').value;
+
+            const hyperparameters = {};
+            document.querySelectorAll('#hyperparameter-fields input').forEach(input => {
+                hyperparameters[input.id] = input.value;
+            });
+
+            const data = {
+                algorithm: selectedAlgorithm,
+                hyperparameters: hyperparameters,
+                evaluation_metric: evaluationMetric,
+                task_type: taskType
+            };
+
+            fetch('/manual_train', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    alert('Model training started: ' + result.message);
+                })
+                .catch(error => console.error('Error:', error));
         }
-    },
-    'Gaussion Naive Bayes Classifier': {
-        description: 'Gaussian Naive Bayes is a simple probabilistic classifier based on applying Bayes theorem.',
-        hyperparameters: {
-            'var_smoothing': 'number'
-        }
-    },
-    'Random Forest Classifier': {
-        description: 'Random Forest is a versatile classification algorithm.',
-        hyperparameters: {
-            'n_estimators': 'number',
-            'max_depth': 'number',
-            'random_state': 'number'
-        }
-    },
-    'K-Nearest Neighbors Classifier': {
-        description: 'K-Nearest Neighbors is a simple algorithm that stores all available cases and classifies new cases based on a similarity measure.',
-        hyperparameters: {
-            'n_neighbors': 'number',
-            'weights': 'text',
-            'algorithm': 'text'
-        }
-    },
-    'Decision Tree Classifier': {
-        description: 'Decision Tree is a flowchart-like tree structure where an internal node represents a feature.',
-        hyperparameters: {
-            'max_depth': 'number',
-            'min_samples_split': 'number',
-            'min_samples_leaf': 'number'
-        }
-    },
-    'Support Vector Machine Classifier': {
-        description: 'Support Vector Machine is used for both regression and classification tasks.',
-        hyperparameters: {
-            'kernel': 'text',
-            'C': 'number',
-            'gamma': 'number'
-        }
-    }
-};
 
-// Assume taskType is known from the backend (either 'regression' or 'classification')
-let taskType = 'regression'; // or 'classification', set this dynamically based on task
+        window.onload = populateAlgorithmOptions; // Populate on load
+    </script>
 
-// Load appropriate models on page load
-window.onload = function() {
-    populateAlgorithmOptions();
-};
-
-function populateAlgorithmOptions() {
-    const algorithmSelect = document.getElementById('algorithm');
-    algorithmSelect.innerHTML = ''; // Clear existing options
-
-    const models = taskType === 'regression' ? regressionModels : classificationModels;
-    for (let model in models) {
-        const option = document.createElement('option');
-        option.value = model;
-        option.text = model;
-        algorithmSelect.add(option);
-    }
-
-    updateHyperparameters(); // Show initial hyperparameters
-}
-
-function updateHyperparameters() {
-    const selectedAlgorithm = document.getElementById('algorithm').value;
-    const models = taskType === 'regression' ? regressionModels : classificationModels;
-
-    // Update selected algorithm info on the left panel
-    document.getElementById('algorithm-name').innerText = selectedAlgorithm;
-    document.getElementById('task-type').innerText = taskType;
-    document.getElementById('algorithm-description').innerText = models[selectedAlgorithm].description;
-
-    // Generate hyperparameter fields
-    const hyperparameterFields = document.getElementById('hyperparameter-fields');
-    hyperparameterFields.innerHTML = ''; // Clear previous fields
-
-    const hyperparameters = models[selectedAlgorithm].hyperparameters;
-    for (let param in hyperparameters) {
-        const inputType = hyperparameters[param];
-        const label = document.createElement('label');
-        label.innerText = param;
-
-        const input = document.createElement('input');
-        input.type = inputType;
-        input.id = param;
-
-        hyperparameterFields.appendChild(label);
-        hyperparameterFields.appendChild(input);
-    }
-}
-
-function submitConfig() {
-    const selectedAlgorithm = document.getElementById('algorithm').value;
-
-    // Collect hyperparameter values
-    const hyperparameters = {};
-    document.querySelectorAll('#hyperparameter-fields input').forEach(input => {
-        if (input.type === 'checkbox') {
-            hyperparameters[input.id] = input.checked;
-        } else {
-            hyperparameters[input.id] = input.value;
-        }
-    });
-
-    // Prepare data to send to Flask
-    const data = {
-        algorithm: selectedAlgorithm,
-        hyperparameters: hyperparameters
-    };
-
-    // Send POST request to Flask
-    fetch('/manual_train', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Training Result:', result);
-        alert('Model training started: ' + result.message);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-</script>
 </body>
+
 </html>

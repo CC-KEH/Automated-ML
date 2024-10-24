@@ -1,6 +1,6 @@
 import joblib
 import pandas as pd
-from AutoML.utils import logger
+from AutoML.logger import logger
 from sklearn.linear_model import LinearRegression, LogisticRegression, ElasticNet
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor

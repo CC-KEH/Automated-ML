@@ -2,7 +2,7 @@ import os
 import yaml
 import json
 import joblib
-from AutoML.utils import logger
+from AutoML.logger import logger
 from typing import Any
 from pathlib import Path
 from box.exceptions import BoxValueError  # For Custom Exceptions

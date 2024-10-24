@@ -1,5 +1,5 @@
 import pandas as pd
-from AutoML.utils.main_utils import logger
+from AutoML.logger import logger
 from AutoML.components.model_trainer import Regression_Model_Trainer, Classification_Model_Trainer 
 from AutoML.config.configuration import Configuration_Manager
 
