@@ -1,4 +1,6 @@
 import os
+from constants import MANUAL_CONFIG_PATH
+import json
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -10,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder,OneHotEncoder
 
 
 class Data_Transformation:
@@ -75,7 +77,24 @@ class Data_Transformation:
         object_features = [feature for feature in object_features if feature not in categorical_features]
         return categorical_features, object_features
 
-    def initiate_data_transformation(self):
+    def apply_encoding(self, technique='label'):
+        """Applies encoding to categorical features based on the technique provided."""
+        if technique == 'label':
+            encoder = LabelEncoder()
+            for feature in self.data.columns:
+                if self.data[feature].dtype == 'object':
+                    self.data[feature] = encoder.fit_transform(self.data[feature])
+
+        else:
+            encoder = OneHotEncoder()
+            for feature in self.data.columns:
+                if self.data[feature].dtype == 'object':
+                    encoded_categories = encoder.fit_transform(self.data[feature])
+                    self.data = self.data.drop(feature, axis=1)
+                    self.data = pd.concat([self.data, encoded_categories], axis=1)
+    
+    
+    def initiate_data_transformation(self,manual_config):
         """Initiates the complete data transformation process."""
         logger.info("Initiating Data Transformation")
        
@@ -93,32 +112,60 @@ class Data_Transformation:
         
         categorical_features, object_features = self.get_categorical_features(object_features)
         
-        if categorical_features:
-            # ! Might Cause Error
-            # Perform one-hot encoding on categorical features
-            encoder = LabelEncoder()
-            encoded_categories = encoder.fit_transform(self.data[categorical_features])
-            self.data = self.data.drop(categorical_features, axis=1)
-                
-            # Standardize the data
-            self.standardize_data()
+        if manual_config=='auto':
+            if categorical_features:
+                # ! Might Cause Error
+                # Perform encoding on categorical features
+                encoder = LabelEncoder()
+                encoded_categories = encoder.fit_transform(self.data[categorical_features])
+                self.data = self.data.drop(categorical_features, axis=1)
 
-            # Combine the encoded categories with the data
-            self.data = pd.concat([self.data, encoded_categories], axis=1)
+                # Standardize the data
+                self.standardize_data()
+
+                # Combine the encoded categories with the data
+                self.data = pd.concat([self.data, encoded_categories], axis=1)
+
+            else:
+                self.standardize_data()
+
+            self.data['target'] = self.target
+
+            # Perform feature selection and dimensionality reduction based on feature count
+            if feature_count >= 30:
+                logger.info("Feature count is greater than 30, selecting top 10 features using correlation")
+                self.select_features()
+
+            if feature_count >= 20:
+                logger.info("Feature count is greater than 20, reducing dimensionality using PCA")
+                self.reduce_dimensionality()
+
+            # Save the transformed data
+            self.split_and_save_data()
         
         else:
+            # Train only on numerical features
+            if manual_config['train_numerical']:
+                self.data = self.data[numerical_features]
+                
+            
+            # Train on all features        
+            else:
+                # Encoding type for categorical features
+                if not manual_config['n']:
+                    self.apply_encoding(technique='label')
+
+                else: # One-hot encoding
+                    self.apply_encoding(technique='one-hot')
+            
             self.standardize_data()
-        
-        self.data['target'] = self.target
-        
-        # Perform feature selection and dimensionality reduction based on feature count
-        if feature_count >= 30:
-            logger.info("Feature count is greater than 30, selecting top 10 features using correlation")
-            self.select_features()
-
-        if feature_count >= 20:
-            logger.info("Feature count is greater than 20, reducing dimensionality using PCA")
-            self.reduce_dimensionality()
-
-        # Save the transformed data
-        self.split_and_save_data()
+                 
+            # Dimensionality reduction technique
+            if manual_config['dimension_reduction'] == 'pca':
+                self.reduce_dimensionality(technique='pca')
+            
+            elif manual_config['dimension_reduction'] == 'lda':
+                self.reduce_dimensionality(technique='lda')
+                
+            # Save the transformed data
+            self.split_and_save_data()

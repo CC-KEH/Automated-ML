@@ -1,5 +1,5 @@
 from AutoML.logger import logger
-from AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation 
+from AutoML.components.model_evaluation import Regression_Model_Evaluation, Classification_Model_Evaluation, Clustering_Model_Evaluation 
 from AutoML.config.configuration import Configuration_Manager
 import pandas as pd
 
@@ -10,27 +10,31 @@ class ModelEvaluationTrainingPipeline:
     def __init__(self):
         pass
     
-    def main(self):
-        data = pd.read_csv('artifacts/data_transformation/test.csv')
-        if data['target'].dtype == 'float64':
-            mode = 'regression'
-        else:
-            mode = 'classification'
+    def main(self,manual_config=None):
+        task_type = manual_config['task_type']
+        
             
         try:
-            if mode == 'regression':
+            if task_type == 'regression':
                 config = Configuration_Manager()
                 model_evaluation_config = config.get_regression_model_evaluation_config()
                 model_evaluation = Regression_Model_Evaluation(config=model_evaluation_config)
-                model_evaluation.initiate_model_evaluation()
+                model_evaluation.initiate_model_evaluation(manual_config)
 
-            elif mode == 'classification':
+            elif task_type == 'classification':
                 config = Configuration_Manager()
                 model_evaluation_config = config.get_classification_model_evaluation_config()
                 model_evaluation = Classification_Model_Evaluation(config=model_evaluation_config)
-                model_evaluation.initiate_model_evaluation()
+                model_evaluation.initiate_model_evaluation(manual_config)
+            
+            elif task_type == 'clustering':
+                config = Configuration_Manager()
+                model_evaluation_config = config.get_clustering_model_evaluation_config()
+                model_evaluation = Clustering_Model_Evaluation(config=model_evaluation_config)
+                model_evaluation.initiate_model_evaluation(manual_config)
+            
             else:
-                raise ValueError(f"Invalid mode: {mode}. Please enter either 'regression' or 'classification")
+                raise ValueError(f"Invalid mode: {task_type}. Please enter either 'regression' or 'classification")
         except Exception as e:
             raise e
 

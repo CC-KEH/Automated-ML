@@ -8,12 +8,12 @@ class DataTransformationTrainingPipeline:
     def __init__(self):
         pass
     
-    def main(self):    
+    def main(self,manual_config):    
         try:
             config = Configuration_Manager()
             data_transformation_config = config.get_data_transformation_config()
             data_transformation = Data_Transformation(config=data_transformation_config)
-            data_transformation.initiate_data_transformation()
+            data_transformation.initiate_data_transformation(manual_config)
         except Exception as e:
             raise e
 

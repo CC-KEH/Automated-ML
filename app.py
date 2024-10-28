@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
-from werkzeug.utils import secure_filename
 import sys
+import json
 
+from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 
+from AutoML.constants import MANUAL_CONFIG_PATH
 
 app = Flask(__name__)
 
@@ -50,29 +52,19 @@ def manual_config():
 
 @app.route('/manual_train', methods=['POST'])
 def manual_train():
-    # Ensure the request is JSON
-    if request.is_json:
-        data = request.get_json()
-        
-        # Extract algorithm name and hyperparameters
-        algorithm_name = data.get('algorithm')
-        hyperparameters = data.get('hyperparameters')
+    # Parse the received JSON data
+    config_data = request.json
 
-        if not algorithm_name or not hyperparameters:
-            return jsonify({'message': 'Missing algorithm or hyperparameters'}), 400
+    # Save the config data to a JSON file
+    with open('manual_config.json', 'w') as config_file:
+        json.dump(config_data, config_file, indent=4)
 
-        # Simulate training by calling an external script
-        print(f"Algorithm: {algorithm_name}, Hyperparameters: {hyperparameters}")
-        
-        # Assuming manual.py expects the hyperparameters in a specific format, convert it here
-        hyperparams_str = ' '.join([f"--{key} {value}" for key, value in hyperparameters.items()])
-        
-        # Call manual.py with the algorithm name and hyperparameters
-        os.system(f'python manual.py {algorithm_name} {hyperparams_str}')
+    # Placeholder message - replace with actual training logic
+    response_message = 'Configuration received and saved. Model training would start here.'
 
-        return jsonify({'message': 'Manual Training Successful!'}), 200
-    else:
-        return jsonify({'message': 'Request must be JSON'}), 400
+    os.system(f'{sys.executable} main.py')
+    # Return a response
+    return jsonify({'message': response_message})
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):

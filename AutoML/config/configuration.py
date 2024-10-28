@@ -83,3 +83,28 @@ class Configuration_Manager:
                                                           mlflow_uri="https://dagshub.com/CC-KEH/AutomatedML.mlflow",
                                                           )
         return model_evaluation_config
+    
+    
+    #*
+    #* Clustering Configurations
+    def get_clustering_model_trainer_config(self) -> Model_Trainer_Config:
+        config = self.config.model_trainer
+        params = self.params
+        create_directories([config.root_dir])
+        model_trainer_config = Model_Trainer_Config(root_dir=config.root_dir,
+                                                    train_path=config.train_path,
+                                                    params=params)
+        return model_trainer_config
+    
+    def get_clustering_model_evaluation_config(self) -> Model_Evaluation_Config:
+        config = self.config.model_evaluation
+        params = self.params
+        create_directories([config.root_dir])
+        model_evaluation_config = Model_Evaluation_Config(root_dir=config.root_dir,
+                                                          test_path=config.test_path,
+                                                          model_path=config.model_path,
+                                                          all_params=params,
+                                                          metric_file_name=config.metric_file_name,
+                                                          mlflow_uri="https://dagshub.com/CC-KEH/AutomatedML.mlflow",
+                                                          )
+        return model_evaluation_config

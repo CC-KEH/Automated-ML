@@ -17,10 +17,13 @@ class Data_Ingestion:
         source_file_name = os.listdir(source_dir)[0]  # Assuming there's only one file in the directory
         source_file = os.path.join(source_dir, source_file_name)
         
+
         # Ensure the destination directory exists
         data_path = self.config.data_path
         os.makedirs(os.path.dirname(data_path), exist_ok=True)
-    
+        # Rename the file to data.csv
+        data_path = os.path.join(data_path, "data.csv")
+        
         # Copy the file to the destination
         shutil.copy(source_file, data_path)
 
@@ -59,11 +62,18 @@ class Data_Ingestion:
         data = pd.DataFrame(list(collection.find()))
         return data
     
-    def initiate_data_ingestion(self):
+    def initiate_data_ingestion(self, manual_config=None):
         ''' Initiates the data ingestion process
         '''
-        logger.info("Initiating Data Ingestion")
-        self.save_data_to_path()
-        self.store_to_mongo()
-        # self.convert_to_csv()
-        logger.info("Data Ingestion Completed")
+        if manual_config == 'local':
+            logger.info("Initiating Data Ingestion")
+            self.save_data_to_path()
+            # self.store_to_mongo()
+            # self.convert_to_csv()
+            logger.info("Data Ingestion Completed") 
+        else:
+            # Load data from MongoDB
+            logger.info("Initiating Data Ingestion")
+            data = self.fetch_data_from_mongo()
+            data.to_csv(self.config.data_path,index=False)
+            logger.info("Data Ingestion Completed")

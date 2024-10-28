@@ -188,10 +188,14 @@
             <h3>Model Evaluation</h3>
             <label for="evaluation-metric">Evaluation Metric:</label>
             <select id="evaluation-metric">
-                <option value="accuracy">Accuracy (Classification)</option>
-                <option value="f1-score">F1-Score (Classification)</option>
-                <option value="r2">R² Score (Regression)</option>
-                <option value="mse">Mean Squared Error (Regression)</option>
+                <option value="auto">Auto</option>
+                <option value="accuracy_score">Accuracy (Classification)</option>
+                <option value="f1_score">F1-Score (Classification)</option>
+                <option value="precision_score">Precision (Classification)</option>
+                <option value="recall_score">Recall (Classification)</option>
+                <option value="r2_score">R² Score (Regression)</option>
+                <option value="mean_absolute_error">Mean Squared Error (Regression)</option>
+                <option value="mean_squared_error">Mean Squared Error (Regression)</option>
             </select>
         </div>
 
@@ -205,6 +209,7 @@
     <script>
         // Models and hyperparameters for regression and classification
         const regressionModels = {
+            'Auto': { hyperparameters: {} },
             'Linear Regression': { hyperparameters: {} },
             'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } },
             'Random Forest Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
@@ -217,6 +222,7 @@
         };
 
         const classificationModels = {
+            'Auto': { hyperparameters: {} },
             'Logistic Regression': { hyperparameters: { penalty: 'text', solver: 'text' } },
             'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
             'Gradient Boosting Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
@@ -228,6 +234,7 @@
         };
 
         const clusteringModels = {
+            'Auto': { hyperparameters: {} },
             'K-Means': { hyperparameters: { n_clusters: 'number' } },
             'DBSCAN': { hyperparameters: { eps: 'number', min_samples: 'number' } },
             'Agglomerative Clustering': { hyperparameters: { n_clusters: 'number' } },
@@ -307,6 +314,19 @@
 
         // Handle form submission
         function submitConfig() {
+            if (document.getElementById('transformation-type').value === 'manual') {
+                transformation_config = {
+                    'train_numerical': document.getElementById('train-numerical').checked,
+                    'dimension_reduction': document.getElementById('dimension-reduction').value,
+                    'encoding_type': document.getElementById('encoding-type').value,
+                    'auto': false
+                };
+            }else{
+                transformation_config = document.getElementById('transformation-type').value;
+                
+            }
+            
+            const dataIngestion = document.getElementById('source-type').value;
             const selectedAlgorithm = document.getElementById('algorithm').value;
             const evaluationMetric = document.getElementById('evaluation-metric').value;
 
@@ -316,6 +336,8 @@
             });
 
             const data = {
+                data_ingestion: dataIngestion,
+                transformation_config: transformation_config,
                 algorithm: selectedAlgorithm,
                 hyperparameters: hyperparameters,
                 evaluation_metric: evaluationMetric,

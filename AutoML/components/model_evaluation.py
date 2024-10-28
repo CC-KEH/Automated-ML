@@ -51,7 +51,7 @@ class Regression_Model_Evaluation:
             else:
                 mlflow.sklearn.load_model(model,'model')
             
-    def initiate_model_evaluation(self):
+    def initiate_model_evaluation(self,manual_config=None):
         self.log_into_mlflow()
         
         
@@ -99,5 +99,19 @@ class Classification_Model_Evaluation:
             else:
                 mlflow.sklearn.load_model(model,'model')
     
-    def initiate_model_evaluation(self):
+    def initiate_model_evaluation(self,manual_config=None):
         self.log_into_mlflow()
+        
+        
+class Clustering_Model_Evaluation:
+    def __init__(self,config:Model_Evaluation_Config):
+        self.config = config
+    
+    def evaluate_metrics(self,actual,pred):
+        pass
+
+    def log_into_mlflow(self):
+        pass
+    
+    def initiate_model_evaluation(self,is_auto):
+        pass
