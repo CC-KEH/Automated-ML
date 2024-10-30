@@ -1,7 +1,9 @@
 import os
 import sys
 import json
-
+import shutil
+import logger
+import pandas as pd
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 
@@ -18,8 +20,18 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def reset():
+    # Remove the manual config file and the uploads directory
+    if os.path.exists('manual_config.json'):
+        os.remove('manual_config.json')
+    if os.path.exists('uploads'):
+        shutil.rmtree('uploads')
+    logger.info('Configurations reset successfully!')
+    
+
 @app.route('/', methods=['GET'])
 def homepage():
+    reset()
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
@@ -54,7 +66,12 @@ def manual_config():
 def manual_train():
     # Parse the received JSON data
     config_data = request.json
+    dataset = config_data['dataset']
+    # copy dataset in uploads folder
+    print(dataset)
+    # shutil.copy(dataset, 'uploads/')
 
+    
     # Save the config data to a JSON file
     with open('manual_config.json', 'w') as config_file:
         json.dump(config_data, config_file, indent=4)
@@ -65,6 +82,32 @@ def manual_train():
     os.system(f'{sys.executable} main.py')
     # Return a response
     return jsonify({'message': response_message})
+
+
+@app.route('/model', methods=['GET'])
+def result():
+
+    with open("manual_config.json", "r") as f:
+        algorithm = json.load(f)['algorithm']
+    
+    # name, description, hyperparameters, metrics
+    with open("models_info.json", "r") as f:
+        models_info = json.load(f)
+        algorithm_info = models_info["models"].get(algorithm, None)
+    
+    with open("artifacts/model_evaluation/metrics.json", "r") as f:
+        metrics = json.load(f)
+
+    # For testing send form with features and target will be predicted
+    data = pd.read_csv("artifacts/data_ingestion/data.csv")
+    features = data.columns.tolist().remove('target')
+    
+    return render_template('model.html', algorithm_info=algorithm_info, metrics=metrics, features=features)
+
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    pass
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):

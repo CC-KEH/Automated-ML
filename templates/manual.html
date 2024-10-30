@@ -196,39 +196,73 @@
                 <option value="r2_score">R² Score (Regression)</option>
                 <option value="mean_absolute_error">Mean Squared Error (Regression)</option>
                 <option value="mean_squared_error">Mean Squared Error (Regression)</option>
+                <option value="silhouette_score">Silhouette Score (Clustering)</option>
+                <option value="davies_bouldin_score">Davies Bouldin Score (Clustering)</option>
             </select>
         </div>
-
     </div>
-
     <!-- Button to train model -->
     <div class="button-group">
         <button onclick="submitConfig()">Train Model</button>
     </div>
 
     <script>
-        // Models and hyperparameters for regression and classification
         const regressionModels = {
             'Auto': { hyperparameters: {} },
             'Linear Regression': { hyperparameters: {} },
             'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } },
             'Random Forest Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
             'Gradient Boosting Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Support Vector Regressor': { hyperparameters: { kernel: 'text', C: 'number' } },
-            'K-Nearest Neighbors Regressor': { hyperparameters: { n_neighbors: 'number', weights: 'text' } },
-            'Decision Tree Regressor': { hyperparameters: { max_depth: 'number', criterion: 'text' } },
+            'Support Vector Regressor': {
+                hyperparameters: {
+                    kernel: { type: 'dropdown', options: ['linear', 'poly', 'rbf', 'sigmoid'] },
+                    C: 'number'
+                }
+            },
+            'K-Nearest Neighbors Regressor': {
+                hyperparameters: {
+                    n_neighbors: 'number',
+                    weights: { type: 'dropdown', options: ['uniform', 'distance'] }
+                }
+            },
+            'Decision Tree Regressor': {
+                hyperparameters: {
+                    max_depth: 'number',
+                    criterion: { type: 'dropdown', options: ['mse', 'friedman_mse', 'mae', 'poisson'] }
+                }
+            },
             'Lasso Regressor': { hyperparameters: { alpha: 'number' } },
             'Ridge Regressor': { hyperparameters: { alpha: 'number' } },
         };
 
         const classificationModels = {
             'Auto': { hyperparameters: {} },
-            'Logistic Regression': { hyperparameters: { penalty: 'text', solver: 'text' } },
+            'Logistic Regression': {
+                hyperparameters: {
+                    penalty: { type: 'dropdown', options: ['l1', 'l2', 'elasticnet', 'none'] },
+                    solver: { type: 'dropdown', options: ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'] }
+                }
+            },
             'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
             'Gradient Boosting Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Support Vector Classifier': { hyperparameters: { kernel: 'text', C: 'number' } },
-            'K-Nearest Neighbors Classifier': { hyperparameters: { n_neighbors: 'number', weights: 'text' } },
-            'Decision Tree Classifier': { hyperparameters: { max_depth: 'number', criterion: 'text' } },
+            'Support Vector Classifier': {
+                hyperparameters: {
+                    kernel: { type: 'dropdown', options: ['linear', 'poly', 'rbf', 'sigmoid'] },
+                    C: 'number'
+                }
+            },
+            'K-Nearest Neighbors Classifier': {
+                hyperparameters: {
+                    n_neighbors: 'number',
+                    weights: { type: 'dropdown', options: ['uniform', 'distance'] }
+                }
+            },
+            'Decision Tree Classifier': {
+                hyperparameters: {
+                    max_depth: 'number',
+                    criterion: { type: 'dropdown', options: ['gini', 'entropy', 'log_loss'] }
+                }
+            },
             'Lasso Classifier': { hyperparameters: { alpha: 'number' } },
             'Ridge Classifier': { hyperparameters: { alpha: 'number' } },
         };
@@ -239,14 +273,39 @@
             'DBSCAN': { hyperparameters: { eps: 'number', min_samples: 'number' } },
             'Agglomerative Clustering': { hyperparameters: { n_clusters: 'number' } },
             'Mean Shift': { hyperparameters: { bandwidth: 'number' } },
+            'Birch': { hyperparameters: { 
+                threshold: 'number',
+                branching_factor: 'number' 
+            } },
+        };
+
+
+        const evaluationMetrics = {
+            regression: [
+                { value: "r2_score", text: "R² Score" },
+                { value: "mean_absolute_error", text: "Mean Absolute Error" },
+                { value: "mean_squared_error", text: "Mean Squared Error" }
+            ],
+            classification: [
+                { value: "accuracy_score", text: "Accuracy" },
+                { value: "f1_score", text: "F1-Score" },
+                { value: "precision_score", text: "Precision" },
+                { value: "recall_score", text: "Recall" }
+            ],
+            clustering: [
+                { value: "silhouette_score", text: "Silhouette Score" },
+                { value: "davies_bouldin_score", text: "Davies Bouldin Score" }
+            ]
         };
 
         let taskType = 'regression'; // Default task type is regression
+        
 
         // Handle prediction type change
         function handlePredictionTypeChange() {
             taskType = document.getElementById('prediction-type').value;
             populateAlgorithmOptions();
+            populateEvaluationMetrics();
         }
 
         // Populate algorithm options based on task type
@@ -254,7 +313,6 @@
             const algorithmSelect = document.getElementById('algorithm');
             algorithmSelect.innerHTML = ''; // Clear existing options
 
-            // Select models based on task type (regression, classification, clustering)
             let models;
             if (taskType === 'regression') {
                 models = regressionModels;
@@ -274,8 +332,21 @@
 
             updateHyperparameters(); // Update hyperparameters on model change
         }
+        function populateEvaluationMetrics() {
+            const evaluationMetricSelect = document.getElementById('evaluation-metric');
+            evaluationMetricSelect.innerHTML = ''; // Clear existing options
+
+            const metrics = evaluationMetrics[taskType];
+            metrics.forEach(metric => {
+                const option = document.createElement('option');
+                option.value = metric.value;
+                option.text = metric.text;
+                evaluationMetricSelect.add(option);
+            });
+        }
 
 
+        // Update hyperparameters based on selected algorithm
         // Update hyperparameters based on selected algorithm
         function updateHyperparameters() {
             const selectedAlgorithm = document.getElementById('algorithm').value;
@@ -297,13 +368,30 @@
             for (let param in hyperparameters) {
                 const label = document.createElement('label');
                 label.innerText = param;
-                const input = document.createElement('input');
-                input.type = hyperparameters[param];
+
+                const paramConfig = hyperparameters[param];
+                let input;
+
+                // Check if the parameter has a dropdown
+                if (typeof paramConfig === 'object' && paramConfig.type === 'dropdown') {
+                    input = document.createElement('select');
+                    paramConfig.options.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.text = option;
+                        input.add(optionElement);
+                    });
+                } else {
+                    input = document.createElement('input');
+                    input.type = typeof paramConfig === 'string' ? paramConfig : 'text'; // default to text if not a specific type
+                }
+
                 input.id = param;
                 hyperparameterFields.appendChild(label);
                 hyperparameterFields.appendChild(input);
             }
         }
+
 
         // Show/hide manual transformation options
         function toggleTransformationOptions() {
@@ -314,6 +402,12 @@
 
         // Handle form submission
         function submitConfig() {
+            // Get dataset file
+            const datasetFile = document.getElementById('upload-dataset').files[0];
+            if (!datasetFile) {
+                alert('Please upload a dataset file');
+                return;
+            }
             if (document.getElementById('transformation-type').value === 'manual') {
                 transformation_config = {
                     'train_numerical': document.getElementById('train-numerical').checked,
@@ -321,11 +415,11 @@
                     'encoding_type': document.getElementById('encoding-type').value,
                     'auto': false
                 };
-            }else{
+            } else {
                 transformation_config = document.getElementById('transformation-type').value;
-                
+
             }
-            
+
             const dataIngestion = document.getElementById('source-type').value;
             const selectedAlgorithm = document.getElementById('algorithm').value;
             const evaluationMetric = document.getElementById('evaluation-metric').value;

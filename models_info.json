@@ -1,0 +1,81 @@
+{
+    "models": [
+        {
+            "name": "Linear Regression",
+            "info": "Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables). The case of one explanatory variable is called simple linear regression."
+        },
+        {
+            "name": "Logistic Regression",
+            "info": "Logistic regression is a statistical model that in its basic form uses a logistic function to model a binary dependent variable, although many more complex extensions exist. In regression analysis, logistic regression (or logit regression) is estimating the parameters of a logistic model (a form of binary regression)."
+        },
+        {
+            "name": "Ridge Regressor",
+            "info": "Ridge regression is a way to create a model when the number of predictor variables in a set exceeds the number of observations, or when a data set has multicollinearity (correlations between predictor variables)."
+        },
+        {
+            "name": "Lasso Regressor",
+            "info": "Lasso regression is a type of linear regression that uses shrinkage. Shrinkage is where data values are shrunk towards a central point, like the mean. The lasso procedure encourages simple, sparse models (i.e. models with fewer parameters). This particular type of regression is well-suited for models showing high levels of multicollinearity or when you want to automate certain parts of model selection, like variable selection/parameter elimination."
+        },
+        {
+            "name": "Elastic Net Regressor",
+            "info": "Elastic Net is a regularized regression method that linearly combines the L1 and L2 penalties of the lasso and ridge methods. The elastic net method overcomes the limitations of the lasso (least absolute shrinkage and selection operator) method which uses a penalty function based on the L1-norm, and the ridge method which uses a penalty function based on the L2-norm."
+        },
+        {
+            "name": "Ridge Classifier",
+            "info": "Ridge regression is a way to create a model when the number of predictor variables in a set exceeds the number of observations, or when a data set has multicollinearity (correlations between predictor variables)."
+        },
+        {
+            "name": "Lasso Classifier",
+            "info": "Lasso regression is a type of linear regression that uses shrinkage. Shrinkage is where data values are shrunk towards a central point, like the mean. The lasso procedure encourages simple, sparse models (i.e. models with fewer parameters). This particular type of regression is well-suited for models showing high levels of multicollinearity or when you want to automate certain parts of model selection, like variable selection/parameter elimination."
+        },
+        {
+            "name": "Elastic Net Classifier",
+            "info": "Elastic Net is a regularized regression method that linearly combines the L1 and L2 penalties of the lasso and ridge methods. The elastic net method overcomes the limitations of the lasso (least absolute shrinkage and selection operator) method which uses a penalty function based on the L1-norm, and the ridge method which uses a penalty function based on the L2-norm." 
+        },
+        {
+            "name": "Decision Tree Regressor",
+            "info": "Decision tree learning uses a decision tree (as a predictive model) to go from observations about an item (represented in the branches) to conclusions about the item's target value (represented in the leaves). It is one of the predictive modeling approaches used in statistics, data mining and machine learning."
+        },
+        {
+            "name": "Decision Tree Classifier",
+            "info": "Decision tree learning uses a decision tree (as a predictive model) to go from observations about an item (represented in the branches) to conclusions about the item's target value (represented in the leaves). It is one of the predictive modeling approaches used in statistics, data mining and machine learning."
+        },
+        {
+            "name": "Random Forest Regressor",
+            "info": "Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees."
+        },
+        {
+            "name": "Random Forest Classifier",
+            "info": "Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees."
+        },
+        {
+            "name": "Support Vector Regressor",
+            "info": "Support vector machines (SVMs) are a set of supervised learning methods used for classification, regression and outliers detection. The advantages of support vector machines are: Effective in high dimensional spaces. Still effective in cases where number of dimensions is greater than the number of samples."
+        },
+        {
+            "name": "Support Vector Classifier",
+            "info": "Support vector machines (SVMs) are a set of supervised learning methods used for classification, regression and outliers detection. The advantages of support vector machines are: Effective in high dimensional spaces. Still effective in cases where number of dimensions is greater than the number of samples."
+        },
+
+        {
+            "name": "K-Nearest Regressor",
+            "info": "In pattern recognition, the k-nearest neighbors algorithm (k-NN) is a non-parametric method used for classification and regression. In both cases, the input consists of the k closest training examples in the feature space."
+        },
+        {
+            "name": "K-Nearest Classifier",
+            "info": "In pattern recognition, the k-nearest neighbors algorithm (k-NN) is a non-parametric method used for classification and regression. In both cases, the input consists of the k closest training examples in the feature space."
+        },
+        {
+            "name": "K-Means Clustering",
+            "info": "K-means clustering is a method of vector quantization, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean (cluster centers or cluster centroid), serving as a prototype of the cluster."
+        },
+        {
+            "name": "Gradient Boosting Regressor",
+            "info": "Gradient boosting is a machine learning technique for regression and classification problems, which produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees. It builds the model in a stage-wise fashion like other boosting methods do, and it generalizes them by allowing optimization of an arbitrary differentiable loss function."
+        },
+        {
+            "name": "Gradient Boosting Classifier",
+            "info": "Gradient boosting is a machine learning technique for regression and classification problems, which produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees. It builds the model in a stage-wise fashion like other boosting methods do, and it generalizes them by allowing optimization of an arbitrary differentiable loss function."
+        }
+    ]
+}

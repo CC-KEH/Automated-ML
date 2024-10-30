@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,120 +8,124 @@
 </head>
 <style>
     body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-size: cover;
-            background-color: #3e3c43;
-        }
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-size: cover;
+        background-color: #3e3c43;
+    }
 
-        h1 {
-            font-size: 50px;
-            margin: 0 0 10px 0;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin-bottom: 20px;
-        }
-        
-        p {
-            font-size: 16px;
-            margin: 0 0 10px 0;
-        }
+    h1 {
+        font-size: 50px;
+        margin: 0 0 10px 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 20px;
+    }
 
-        .left_div {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-        }
-        .model_name{
-            font-size: 30px;
-            color: #6f7399;
-        }
-        .model_report{
-            padding: 10px;
-        }
-        
-        
-        .info_div{
-            padding: 10px;
-            height: 50%;
-        }
+    p {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
 
-        .right_div{
-            position: absolute;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            align-content: space-between;
-        }
-        a{
-            text-decoration: none;
-            color: #6f7399;
-            margin-left: 43.5%;
-            margin-top: 24px;
-        }
-        input{
-            padding: 10px;
-            margin-top: 12px;
-            display: flex;
-            width: 50%;
-            border-radius: 4px;
-            border: none;
-        }
-        button{
-            padding: 10px;
-            background-color: #bec3ee;
-            color: #ffffff;
-            cursor: pointer;
-            border-radius: 4px;
-            height: 40px;
-            border: none;
-            margin-left: 25.5%;
-            margin-top: 24px;
-            width: 52.7%;
-        }
-        button:hover{
-            background-color: #6f7399;
-            color: #fff;
-        }
-        button:focus{
-            background-color: #6f7399;
-            color: #fff;
-        }
+    .left_div {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+    }
+
+    .model_name {
+        font-size: 30px;
+        color: #6f7399;
+    }
+
+    .model_report {
+        padding: 10px;
+    }
+
+
+    .info_div {
+        padding: 10px;
+        height: 50%;
+    }
+
+    .right_div {
+        position: absolute;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        align-content: space-between;
+    }
+
+    a {
+        text-decoration: none;
+        color: #6f7399;
+        margin-left: 43.5%;
+        margin-top: 24px;
+    }
+
+    input {
+        padding: 10px;
+        margin-top: 12px;
+        display: flex;
+        width: 50%;
+        border-radius: 4px;
+        border: none;
+    }
+
+    button {
+        padding: 10px;
+        background-color: #bec3ee;
+        color: #ffffff;
+        cursor: pointer;
+        border-radius: 4px;
+        height: 40px;
+        border: none;
+        margin-left: 25.5%;
+        margin-top: 24px;
+        width: 52.7%;
+    }
+
+    button:hover {
+        background-color: #6f7399;
+        color: #fff;
+    }
+
+    button:focus {
+        background-color: #6f7399;
+        color: #fff;
+    }
 </style>
+
 <body>
     <div class="left_div">
         <div class="info_div">
             <h1>Best Suited Model</h1>
             <span class="model_name">{{ model_name }}</span>
-            <p>{{ model_description }}</p>
+            <p>{{ algorithm_info }}</p>
         </div>
 
         <div class="model_report">
             <h2>Model Performance</h2>
-            <p>{{ model_report }}</p>
+            <p>{{ metrics }}</p>
         </div>
-        
-        
+
+
     </div>
     <div class="right_div">
-            <h2 style="text-align: center;">Test Live</h2>
-            <form action="/predict" method="post">
-                <label for="text">Enter {{feature i}}</label>
-                <input type="text" name="text" placeholder="Enter Feature i here" required>
-                <br>
-                <label for="text">Enter {{feature i+1}}</label>
-                <input type="text" name="text" placeholder="Enter Feature 2 here" required>
-                <br>
-                <label for="text">Enter {{feature i+2}}</label>
-                <input type="text" name="text" placeholder="Enter Feature 3 here" required>
-                <br>
-                <label for="text">Enter {{feature i+n}}</label>
-                <input type="text" name="text" placeholder="Enter Feature 4 here" required>
-                <button type="submit">Predict</button>
-            </form>
-            <a href="{{ model_path }}">Download Model</a>
-            </div>
+        <h2 style="text-align: center;">Test Live</h2>
+        <form action="/predict" method="post">
+            {% for feature in features %}
+            <label for="text">Enter {{feature}}</label>
+            <input type="text" name="{{feature}}" placeholder="Enter {{feature}} here" required>
+            <br>
+            {% endfor %}
+            <input type="text" name="text" placeholder="Enter Feature 4 here" required>
+            <button type="submit">Predict</button>
+        </form>
+        <a href="{{ model_path }}">Download Model</a>
+    </div>
     </div>
 </body>
+
 </html>

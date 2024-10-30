@@ -1,0 +1,9 @@
+{
+    "dataset": {},
+    "data_ingestion": "local",
+    "transformation_config": "auto",
+    "algorithm": "Auto",
+    "hyperparameters": {},
+    "evaluation_metric": "auto",
+    "task_type": "regression"
+}

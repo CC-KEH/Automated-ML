@@ -10,7 +10,7 @@ from AutoML.entity.config_entity import Data_Transformation_Config
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, LDA
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder
 
@@ -23,9 +23,13 @@ class Data_Transformation:
         self.max_selected_features = 20
         self.pca_components = 10
 
-    def reduce_dimensionality(self):
-        pca = PCA(n_components=self.pca_components)
-        self.data = pca.fit_transform(self.data)
+    def reduce_dimensionality(self, technique='pca'):
+        if technique == 'pca':
+            pca = PCA(n_components=self.pca_components)
+            self.data = pca.fit_transform(self.data)
+        else:
+            lda = LDA(n_components=self.pca_components)
+            self.data = lda.fit_transform(self.data)
 
     def standardize_data(self, features=None):
         standard_scaler = StandardScaler()
@@ -162,7 +166,7 @@ class Data_Transformation:
                  
             # Dimensionality reduction technique
             if manual_config['dimension_reduction'] == 'pca':
-                self.reduce_dimensionality(technique='pca')
+                self.reduce_dimensionality() # PCA by default
             
             elif manual_config['dimension_reduction'] == 'lda':
                 self.reduce_dimensionality(technique='lda')

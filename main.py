@@ -84,7 +84,9 @@ if __name__ == "__main__":
             model_training_config["algorithm"] = manual_config["algorithm"]
             model_training_config["task_type"] = manual_config["task_type"]
             model_training_config["evaluation_metric"] = manual_config["evaluation_metric"]
-            model_evaluation_config = manual_config["evaluation_metric"]
+            model_evaluation_config["evaluation_metric"] = manual_config["evaluation_metric"]
+            model_evaluation_config["task_type"] = manual_config["task_type"]
+            
             if manual_config["hyperparameters"]:
                 model_training_config["hyperparameters"] = manual_config["hyperparameters"]
 

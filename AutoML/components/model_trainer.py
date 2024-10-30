@@ -111,6 +111,7 @@ class Regression_Model_Trainer:
             
             if 'parameters' in manual_config:
                 model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
 
             model.fit(self.X_train, self.y_train)
 
@@ -224,7 +225,9 @@ class Classification_Model_Trainer:
                         
             if 'parameters' in manual_config:
                 model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
-
+            
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
+            
             model.fit(self.X_train, self.y_train)
 
             logger.info(f'{manual_config["algorithm"]} model trained successfully')
@@ -333,6 +336,7 @@ class Clustering_Model_Trainer:
                         
             if 'parameters' in manual_config:
                 model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
             
             model.fit(self.X_train, self.y_train)
 
