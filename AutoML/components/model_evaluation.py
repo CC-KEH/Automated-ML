@@ -49,7 +49,7 @@ class Regression_Model_Evaluation:
             if tracking_url_type_store !='file':
                 mlflow.sklearn.log_model(model,"model",registered_model_name="AutoML Regression Model")
             else:
-                mlflow.sklearn.load_model(model,'model')
+                mlflow.sklearn.log_model(model,'model')
             
     def initiate_model_evaluation(self,manual_config=None):
         self.log_into_mlflow()
@@ -96,7 +96,7 @@ class Classification_Model_Evaluation:
             if tracking_url_type_store !='file':
                 mlflow.sklearn.log_model(model,"model",registered_model_name="AutoML Classification Model")
             else:
-                mlflow.sklearn.load_model(model,'model')
+                mlflow.sklearn.log_model(model,'model')
     
     def initiate_model_evaluation(self,manual_config=None):
         self.log_into_mlflow()
@@ -106,7 +106,7 @@ class Clustering_Model_Evaluation:
     def __init__(self, config: Model_Evaluation_Config):
         self.config = config
     
-    def evaluate_metrics(self, actual, pred) -> Dict[str, float]:
+    def evaluate_metrics(self, actual, pred):
         """
         Evaluate and return clustering metrics.
         """

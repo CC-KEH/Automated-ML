@@ -109,9 +109,9 @@ class Regression_Model_Trainer:
         else:
             model = self.models[manual_config['algorithm']]
             
-            if 'parameters' in manual_config:
-                model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
-            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
+            if "hyperparameters" in manual_config:
+                model.set_params(**manual_config["hyperparameters"].get(manual_config['algorithm'], {}))
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["hyperparameters"].get(manual_config["algorithm"], {})}')
 
             model.fit(self.X_train, self.y_train)
 
@@ -223,10 +223,10 @@ class Classification_Model_Trainer:
         else:
             model = self.models[manual_config['algorithm']]
                         
-            if 'parameters' in manual_config:
-                model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
+            if "hyperparameters" in manual_config:
+                model.set_params(**manual_config["hyperparameters"].get(manual_config['algorithm'], {}))
             
-            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["hyperparameters"].get(manual_config["algorithm"], {})}')
             
             model.fit(self.X_train, self.y_train)
 
@@ -334,9 +334,9 @@ class Clustering_Model_Trainer:
         else:
             model = self.models[manual_config['algorithm']]
                         
-            if 'parameters' in manual_config:
-                model.set_params(**manual_config['parameters'].get(manual_config['algorithm'], {}))
-            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["parameters"].get(manual_config["algorithm"], {})}')
+            if "hyperparameters" in manual_config:
+                model.set_params(**manual_config["hyperparameters"].get(manual_config['algorithm'], {}))
+            logger.info(f'Training {manual_config["algorithm"]} model on Hyperparameters: {manual_config["hyperparameters"].get(manual_config["algorithm"], {})}')
             
             model.fit(self.X_train, self.y_train)
 

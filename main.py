@@ -37,7 +37,6 @@ def data_transformation(manual_config=None):
         logger.exception(e)
         raise e
 
-
 def model_training(manual_config=None):
     STAGE_NAME = "Model Training Stage"
     try:

@@ -13,17 +13,22 @@
         padding: 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-size: cover;
-        background-color: #3e3c43;
+        background-color: #030303;
     }
 
     h1 {
+        color: #fff;
         font-size: 50px;
         margin: 0 0 10px 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin-bottom: 20px;
     }
-
+    h2{
+        font-size: 36px;
+        color: #fff;
+    }
     p {
+        color: #fff;
         font-size: 16px;
         margin: 0 0 10px 0;
     }
@@ -36,7 +41,7 @@
 
     .model_name {
         font-size: 30px;
-        color: #6f7399;
+        color: #8793ff;
     }
 
     .model_report {
@@ -59,14 +64,13 @@
 
     a {
         text-decoration: none;
-        color: #6f7399;
-        margin-left: 43.5%;
-        margin-top: 24px;
+        color: #8793ff;
+        margin-left: 42%;
     }
 
     input {
         padding: 10px;
-        margin-top: 12px;
+        margin-top: 10px;
         display: flex;
         width: 50%;
         border-radius: 4px;
@@ -75,13 +79,13 @@
 
     button {
         padding: 10px;
-        background-color: #bec3ee;
+        background-color: #8793ff;
         color: #ffffff;
         cursor: pointer;
         border-radius: 4px;
         height: 40px;
         border: none;
-        margin-left: 25.5%;
+        margin-left: 11%;
         margin-top: 24px;
         width: 52.7%;
     }
@@ -92,7 +96,7 @@
     }
 
     button:focus {
-        background-color: #6f7399;
+        background-color: #8793ff;
         color: #fff;
     }
 </style>
@@ -107,25 +111,52 @@
 
         <div class="model_report">
             <h2>Model Performance</h2>
-            <p>{{ metrics }}</p>
+            {% for metric in metrics %}
+            <ul>{{ metric }}: {{ metrics[metric] }}</ul>
+            {% endfor %}
         </div>
-
-
     </div>
     <div class="right_div">
         <h2 style="text-align: center;">Test Live</h2>
-        <form action="/predict" method="post">
+        <p>Enter 0 for false/female and 1/male for true</p>
+        <!-- Form with AJAX and JSON format submission -->
+        <form id="predictForm">
             {% for feature in features %}
             <label for="text">Enter {{feature}}</label>
             <input type="text" name="{{feature}}" placeholder="Enter {{feature}} here" required>
             <br>
             {% endfor %}
-            <input type="text" name="text" placeholder="Enter Feature 4 here" required>
-            <button type="submit">Predict</button>
+            <button type="button" onclick="submitForm()">Predict</button>
         </form>
         <a href="{{ model_path }}">Download Model</a>
     </div>
-    </div>
 </body>
+<script>
+    function submitForm() {
+        const form = document.getElementById('predictForm');
+        const formData = new FormData(form);
+        const data = {};
 
+        // Convert form data to JSON
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Display response data or handle it as needed
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 </html>

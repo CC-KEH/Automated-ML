@@ -1,9 +1,11 @@
 {
-    "dataset": {},
     "data_ingestion": "local",
     "transformation_config": "auto",
-    "algorithm": "Auto",
-    "hyperparameters": {},
-    "evaluation_metric": "auto",
-    "task_type": "regression"
+    "algorithm": "Logistic Regression",
+    "hyperparameters": {
+        "penalty": "l2",
+        "solver": "newton-cg"
+    },
+    "evaluation_metric": "accuracy_score",
+    "task_type": "classification"
 }

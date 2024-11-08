@@ -8,14 +8,54 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #030303;
             color: #fff;
-            background-image: url("static/blob.svg");
             background-size: cover;
+        }
+
+        .blob-background {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(145deg, #754fcc, #a366d4);
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.6;
+            animation: morph 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        /* Animation for morphing blob */
+        @keyframes morph {
+            0% {
+                border-radius: 50% 50% 40% 60%;
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                border-radius: 60% 40% 50% 50%;
+                transform: translate(-20px, 10px) rotate(20deg);
+            }
+
+            50% {
+                border-radius: 40% 60% 60% 40%;
+                transform: translate(20px, -20px) rotate(-20deg);
+            }
+
+            75% {
+                border-radius: 50% 50% 40% 60%;
+                transform: translate(-10px, 10px) rotate(10deg);
+            }
+
+            100% {
+                border-radius: 50% 50% 40% 60%;
+                transform: translate(0, 0) rotate(0deg);
+            }
         }
 
         h1 {
@@ -105,20 +145,22 @@
 </head>
 
 <body>
+    <div class="blob-background"></div>
     <div class="left_div">
         <div class="info_div">
             <h1>Automated ML</h1>
-            <p>Automated ML is a tool that automatically trains machine learning models for you. It is a great tool for
-                those who are new to machine learning and want to get started quickly.</p>
-            <p>With Automated ML, you can upload your data, select the type of model you want to train, and let the tool
-                do the rest. It will automatically preprocess your data, train the model, and evaluate its performance.
+            <p>Automated ML is a powerful tool designed to streamline machine learning for users of all levels. Whether
+                you’re just getting started or are a seasoned data scientist, Automated ML offers flexible options for
+                building and training models that suit your needs.</p>
+            <p>With Automatically Train Mode, you can simply upload your data, select the type of model you want to train, and let
+                Automated ML handle everything. It will automatically preprocess your data, train the model, and
+                evaluate its performance—getting you quick results with minimal setup.
             </p>
+            <p>For those who want more control, our Manually Configure allows you to configure each stage of the ML process to
+                fit your requirements. Customize data preprocessing, model selection, and evaluation settings to achieve
+                the best results for complex or specialized tasks.</p>
             <p>Automated ML supports a variety of machine learning tasks, including classification, regression, and
-                clustering. It also supports a wide range of algorithms, so you can choose the one that best fits your
-                data and problem.</p>
-            <p>Whether you are a beginner or an experienced data scientist, Automated ML can help you save time and
-                effort by automating the machine learning process. Try it out today and see how easy it is to train
-                machine learning models!</p>
+                clustering, and provides a wide range of algorithms to match your data and problem.</p>
         </div>
     </div>
     <div class="right_div">
@@ -135,6 +177,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // Trigger file input when the Automatically Train button is clicked
         document.getElementById('autoTrainButton').addEventListener('click', function () {

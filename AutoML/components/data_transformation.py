@@ -10,7 +10,8 @@ from AutoML.entity.config_entity import Data_Transformation_Config
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA, LDA
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder
 
@@ -25,13 +26,20 @@ class Data_Transformation:
 
     def reduce_dimensionality(self, technique='pca'):
         if technique == 'pca':
+            logger.info("Reducing dimensionality using PCA")
+            logger.info("Data shape before PCA: {}".format(self.data.shape))
             pca = PCA(n_components=self.pca_components)
             self.data = pca.fit_transform(self.data)
+            logger.info("Data shape after PCA: {}".format(self.data.shape))
         else:
+            logger.info("Reducing dimensionality using LDA")
+            logger.info("Data shape before LDA: {}".format(self.data.shape))
             lda = LDA(n_components=self.pca_components)
-            self.data = lda.fit_transform(self.data)
+            self.data = lda.fit_transform(self.data,self.target)
+            logger.info("Data shape after LDA: {}".format(self.data.shape))
 
     def standardize_data(self, features=None):
+        logger.info("Standardizing the data")
         standard_scaler = StandardScaler()
         if features:
             self.data[features] = standard_scaler.fit_transform(self.data[features])
@@ -53,14 +61,33 @@ class Data_Transformation:
 
     def split_and_save_data(self):
         """Saves the transformed data to the output path defined in config."""
-        X_train,X_test,y_train,y_test = train_test_split(self.data.drop('target', axis=1), self.data['target'], test_size=0.2, random_state=42)
-        train_data = pd.concat([X_train, y_train], axis=1)
-        test_data = pd.concat([X_test, y_test], axis=1)
+        # If self.data is not a DataFrame, convert it back
+        if isinstance(self.data, np.ndarray):
+            self.data = pd.DataFrame(self.data, columns=[f'feature_{i}' for i in range(self.data.shape[1])])
+
+        # Ensure that self.target is a Series
+        if not isinstance(self.target, pd.Series):
+            self.target = pd.Series(self.target, name='target')
+
+        # Perform train-test split
+        X_train, X_test, y_train, y_test = train_test_split(self.data, self.target, test_size=0.2, random_state=47)
+
+        # Concatenate the splits for saving
+        train_data = pd.concat([X_train, y_train.reset_index(drop=True)], axis=1)
+        test_data = pd.concat([X_test, y_test.reset_index(drop=True)], axis=1)
         
+        train_data.dropna(inplace=True)
+        test_data.dropna(inplace=True)
+                
+        logger.info("Train set shape: {}".format(train_data.shape))
+        logger.info("Test set shape: {}".format(test_data.shape))
+        
+        # Save to CSV
         train_data.to_csv(self.config.train_path, index=False)
         test_data.to_csv(self.config.test_path, index=False)
         logger.info("Splitted and saved the transformed data.")
-        
+
+
     def get_features(self):
         """Returns numerical and object (categorical) features from the dataset."""
         numerical_features = self.data.select_dtypes(include=[np.number]).columns
@@ -84,12 +111,14 @@ class Data_Transformation:
     def apply_encoding(self, technique='label'):
         """Applies encoding to categorical features based on the technique provided."""
         if technique == 'label':
+            logger.info("Applying Label Encoding")
             encoder = LabelEncoder()
             for feature in self.data.columns:
                 if self.data[feature].dtype == 'object':
                     self.data[feature] = encoder.fit_transform(self.data[feature])
 
         else:
+            logger.info("Applying One Hot Encoding")
             encoder = OneHotEncoder()
             for feature in self.data.columns:
                 if self.data[feature].dtype == 'object':
@@ -97,79 +126,48 @@ class Data_Transformation:
                     self.data = self.data.drop(feature, axis=1)
                     self.data = pd.concat([self.data, encoded_categories], axis=1)
     
-    
-    def initiate_data_transformation(self,manual_config):
-        """Initiates the complete data transformation process."""
+    def initiate_data_transformation(self, manual_config):
         logger.info("Initiating Data Transformation")
-       
         self.data = pd.read_csv(self.config.data_path)
+        
+        # 1. Remove duplicates and handle NaNs.
+        self.data = self.data.drop_duplicates().fillna(method='ffill')
         self.target = self.data['target']
         self.data = self.data.drop('target', axis=1)
         
-        # Count number of features
-        feature_count = len(self.data.columns)
-        
-        # Remove duplicate features
-        self.data = self.data.drop_duplicates()
-        
+        # 2. Get numerical and object features.
         numerical_features, object_features = self.get_features()
-        
-        categorical_features, object_features = self.get_categorical_features(object_features)
-        
-        if manual_config=='auto':
-            if categorical_features:
-                # ! Might Cause Error
-                # Perform encoding on categorical features
-                encoder = LabelEncoder()
-                encoded_categories = encoder.fit_transform(self.data[categorical_features])
-                self.data = self.data.drop(categorical_features, axis=1)
 
-                # Standardize the data
-                self.standardize_data()
-
-                # Combine the encoded categories with the data
-                self.data = pd.concat([self.data, encoded_categories], axis=1)
-
-            else:
-                self.standardize_data()
-
-            self.data['target'] = self.target
-
-            # Perform feature selection and dimensionality reduction based on feature count
-            if feature_count >= 30:
-                logger.info("Feature count is greater than 30, selecting top 10 features using correlation")
-                self.select_features()
-
-            if feature_count >= 20:
-                logger.info("Feature count is greater than 20, reducing dimensionality using PCA")
-                self.reduce_dimensionality()
-
-            # Save the transformed data
-            self.split_and_save_data()
-        
+        # 3. Apply transformations based on config.
+        if manual_config == 'auto':
+            self.auto_transformation(numerical_features, object_features)
         else:
-            # Train only on numerical features
-            if manual_config['train_numerical']:
-                self.data = self.data[numerical_features]
-                
-            
-            # Train on all features        
-            else:
-                # Encoding type for categorical features
-                if not manual_config['n']:
-                    self.apply_encoding(technique='label')
+            self.manual_transformation(manual_config, numerical_features, object_features)
 
-                else: # One-hot encoding
-                    self.apply_encoding(technique='one-hot')
-            
-            self.standardize_data()
-                 
-            # Dimensionality reduction technique
-            if manual_config['dimension_reduction'] == 'pca':
-                self.reduce_dimensionality() # PCA by default
-            
-            elif manual_config['dimension_reduction'] == 'lda':
-                self.reduce_dimensionality(technique='lda')
-                
-            # Save the transformed data
-            self.split_and_save_data()
+        # 4. Save the transformed data.
+        self.split_and_save_data()
+
+    def auto_transformation(self, numerical_features, object_features):
+        """Handles auto data transformation workflow."""
+        categorical_features, _ = self.get_categorical_features(object_features)
+        if categorical_features:
+            self.apply_encoding(technique='label')
+        self.standardize_data()
+        if len(self.data.columns) >= 30:
+            self.select_features()
+        if len(self.data.columns) >= 20:
+            self.reduce_dimensionality()
+
+    def manual_transformation(self, manual_config, numerical_features, object_features):
+        """Handles manual data transformation based on provided config."""
+        if manual_config['train_numerical']:
+            self.data = self.data[numerical_features]
+        else:
+            self.apply_encoding(technique=manual_config['encoding_type'])
+        self.standardize_data()
+        
+        if manual_config['dimension_reduction'] == 'pca':
+            self.reduce_dimensionality(technique='pca')
+        
+        elif manual_config['dimension_reduction'] == 'lda':
+            self.reduce_dimensionality(technique='lda')

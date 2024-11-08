@@ -160,7 +160,7 @@
                 <select id="dimension-reduction">
                     <option value="none">None</option>
                     <option value="pca">PCA</option>
-                    <option value="lda">LDA</option>
+                    <!-- <option value="lda">LDA</option> -->
                 </select>
 
                 <label for="encoding-type">Encoding Type:</label>
@@ -273,10 +273,12 @@
             'DBSCAN': { hyperparameters: { eps: 'number', min_samples: 'number' } },
             'Agglomerative Clustering': { hyperparameters: { n_clusters: 'number' } },
             'Mean Shift': { hyperparameters: { bandwidth: 'number' } },
-            'Birch': { hyperparameters: { 
-                threshold: 'number',
-                branching_factor: 'number' 
-            } },
+            'Birch': {
+                hyperparameters: {
+                    threshold: 'number',
+                    branching_factor: 'number'
+                }
+            },
         };
 
 
@@ -299,7 +301,7 @@
         };
 
         let taskType = 'regression'; // Default task type is regression
-        
+
 
         // Handle prediction type change
         function handlePredictionTypeChange() {
@@ -400,6 +402,10 @@
             manualOptions.style.display = (transformationType === 'manual') ? 'block' : 'none';
         }
 
+        function acknowledge() {
+            alert('Model training started.');
+        }
+
         // Handle form submission
         function submitConfig() {
             // Get dataset file
@@ -408,6 +414,9 @@
                 alert('Please upload a dataset file');
                 return;
             }
+
+            // Handle transformation config
+            let transformation_config;
             if (document.getElementById('transformation-type').value === 'manual') {
                 transformation_config = {
                     'train_numerical': document.getElementById('train-numerical').checked,
@@ -417,16 +426,23 @@
                 };
             } else {
                 transformation_config = document.getElementById('transformation-type').value;
-
             }
 
             const dataIngestion = document.getElementById('source-type').value;
             const selectedAlgorithm = document.getElementById('algorithm').value;
             const evaluationMetric = document.getElementById('evaluation-metric').value;
 
+            // Collect hyperparameters from both inputs and dropdowns
             const hyperparameters = {};
+
+            // Collect from input fields
             document.querySelectorAll('#hyperparameter-fields input').forEach(input => {
                 hyperparameters[input.id] = input.value;
+            });
+
+            // Collect from dropdowns
+            document.querySelectorAll('#hyperparameter-fields select').forEach(select => {
+                hyperparameters[select.id] = select.value; // Get value of selected option
             });
 
             const data = {
@@ -437,6 +453,8 @@
                 evaluation_metric: evaluationMetric,
                 task_type: taskType
             };
+
+            acknowledge(); // Notify user that training has started
 
             fetch('/manual_train', {
                 method: 'POST',
