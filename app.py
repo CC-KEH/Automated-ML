@@ -3,9 +3,10 @@ import sys
 import json
 import shutil
 import logger
+import numpy as np
 import pandas as pd
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
 
 from AutoML.logger import logger
 from AutoML.pipelines.prediction import PredictionPipeline
@@ -104,16 +105,16 @@ def manual_train():
     
     print("Rendering model.html")
     
-    return render_template(
-        "model.html",
-        model_name=algorithm,
-        algorithm_info=algorithm_info,
-        metrics=metrics,
-        features=features,
-    )
+    # return render_template(
+    #     "model.html",
+    #     model_name=algorithm,
+    #     algorithm_info=algorithm_info,
+    #     metrics=metrics,
+    #     features=features,
+    # )
+    return redirect(url_for('model'))
 
-
-@app.route("/model", methods=["GET"])
+@app.route("/model", methods=["GET","POST"])
 def result():
 
     with open("manual_config.json", "r") as f:
@@ -140,15 +141,53 @@ def result():
         features=features,
     )
 
+@app.route('/download_model', methods=['GET'])
+def download_model():
+    model_dir = 'artifacts/model_trainer'
+    
+    try:
+        model_files = [f for f in os.listdir(model_dir) if os.path.isfile(os.path.join(model_dir, f)) and f.endswith('.pkl')]
+        
+        if len(model_files) == 0:
+            return jsonify({"error": "No model file found in the directory"})
+        elif len(model_files) > 1:
+            return jsonify({"error": "Multiple model files found. Please ensure only one model file exists."})
+        
+        # If there is exactly one model file, proceed to send it
+        model_file_path = os.path.join(model_dir, model_files[0])
+        return send_file(model_file_path, as_attachment=True)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route("/predict", methods=["POST"])
 def predict():
     # Parse the received JSON data
     prediction_data = request.json
-    print(prediction_data)
+    prediction_dict = {}
+    for key, value in prediction_data.items():
+        prediction_dict[key] = value
+    for key, value in prediction_dict.items():
+        # If value can be converted to float or int, convert it
+        try:
+            prediction_dict[key] = int(value)
+        except ValueError:
+            try:
+                prediction_dict[key] = float(value)
+            except ValueError:
+                pass
+    data = [val for val in prediction_dict.values()]
+    print(data)
+    # Fix the issue of no of features mismatch, model might be trained on different no of features
+    data = np.array(data).reshape(1,len(data))
     
     pipeline = PredictionPipeline()
-    pipeline.predict()
+    output = pipeline.predict(data)
+    if output == 1:
+        output = 'True'
+    else:
+        output = 'False'
+    return render_template("result.html", output=output)
 
 if __name__ == "__main__":
     if not os.path.exists(UPLOAD_FOLDER):
