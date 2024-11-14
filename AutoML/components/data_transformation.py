@@ -139,7 +139,7 @@ class Data_Transformation:
         numerical_features, object_features = self.get_features()
 
         # 3. Apply transformations based on config.
-        if manual_config == 'auto':
+        if manual_config == None:
             self.auto_transformation(numerical_features, object_features)
         else:
             self.manual_transformation(manual_config, numerical_features, object_features)

@@ -65,15 +65,15 @@ class Data_Ingestion:
     def initiate_data_ingestion(self, manual_config=None):
         ''' Initiates the data ingestion process
         '''
-        if manual_config == 'local':
-            logger.info("Initiating Data Ingestion")
-            self.save_data_to_path()
-            # self.store_to_mongo()
-            # self.convert_to_csv()
-            logger.info("Data Ingestion Completed") 
-        else:
+        if manual_config == 'mongo':
             # Load data from MongoDB
             logger.info("Initiating Data Ingestion")
             data = self.fetch_data_from_mongo()
             data.to_csv(self.config.data_path,index=False)
+            logger.info("Data Ingestion Completed")
+        else:
+            logger.info("Initiating Data Ingestion")
+            self.save_data_to_path()
+            # self.store_to_mongo()
+            # self.convert_to_csv()
             logger.info("Data Ingestion Completed")

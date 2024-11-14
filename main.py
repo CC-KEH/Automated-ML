@@ -102,6 +102,7 @@ if __name__ == "__main__":
         model_evaluation(model_evaluation_config)
         
     else:
+        logger.info("Running Automated Pipeline")
         data_ingestion()
         data_transformation()
         model_training()

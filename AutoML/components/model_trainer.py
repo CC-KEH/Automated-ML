@@ -83,8 +83,8 @@ class Regression_Model_Trainer:
     def initiate_model_training(self,manual_config=None):
         logger.info("Initiating Regression Model Training")
         self.manual_config = manual_config
-        
-        if manual_config['algorithm']=='auto':
+            
+        if manual_config == None or manual_config['algorithm']=='auto':
             for model_name, model in self.models.items():
                 model.fit(self.X_train, self.y_train)
 
@@ -198,7 +198,7 @@ class Classification_Model_Trainer:
         self.manual_config = manual_config
         
         
-        if manual_config['algorithm']=='auto':
+        if manual_config == None or manual_config['algorithm']=='auto':
             for model_name, model in self.models.items():
                 model.fit(self.X_train, self.y_train)
 
