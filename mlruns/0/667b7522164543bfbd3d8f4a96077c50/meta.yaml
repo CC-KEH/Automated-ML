@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/667b7522164543bfbd3d8f4a96077c50/artifacts
+end_time: 1732034041206
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 667b7522164543bfbd3d8f4a96077c50
+run_name: mysterious-sheep-118
+run_uuid: 667b7522164543bfbd3d8f4a96077c50
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732034035174
+status: 3
+tags: []
+user_id: arbas

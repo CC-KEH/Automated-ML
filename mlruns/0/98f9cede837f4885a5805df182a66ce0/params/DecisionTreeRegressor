@@ -1,0 +1,1 @@
+{'criterion': ['mse', 'friedman_mse'], 'max_depth': [6, 8, 10]}

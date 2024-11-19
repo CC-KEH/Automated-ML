@@ -18,15 +18,13 @@ class Regression_Model_Trainer:
     def __init__(self,config: Model_Trainer_Config) -> None:
         self.config = config
         self.models = {
-            'Linear Regression': LinearRegression(),
-            'Elastic Net Regressor': ElasticNet(),
-            'Decision Tree Regressor': DecisionTreeRegressor(),
-            'Random Forest Regressor': RandomForestRegressor(),
-            'Support Vector Regressor': SVR(),
-            'Gradient Boosting Regressor': GradientBoostingRegressor(),
-            'K-Nearest Neighbors Regressor': KNeighborsRegressor(),
-            'Lasso Regressor': Lasso(),
-            'Ridge Regressor': Ridge(),
+            'LinearRegression': LinearRegression(),
+            'ElasticNetRegressor': ElasticNet(),
+            'DecisionTreeRegressor': DecisionTreeRegressor(),
+            'RandomForestRegressor': RandomForestRegressor(),
+            'SVR': SVR(),
+            'GradientBoostingRegressor': GradientBoostingRegressor(),
+            'KNeighborsRegressor': KNeighborsRegressor(),
         }
         self.train_data = pd.read_csv(self.config.train_path)
         self.y = self.train_data['target']
@@ -42,13 +40,7 @@ class Regression_Model_Trainer:
         
     
     def get_metrics(self, y_true, y_pred):
-        if self.manual_config['evaluation_metric']=='auto':
-            return {
-                'mean_squared_error': mean_squared_error(y_true, y_pred),
-                'mean_absolute_error': mean_absolute_error(y_true, y_pred),
-                'r2_score': r2_score(y_true, y_pred)
-            }
-        else:
+        if self.manual_config and self.manual_config['evaluation_metric']!='auto':
             if self.manual_config['evaluation_metric']=='mean_squared_error':
                 return {
                     'mean_squared_error': mean_squared_error(y_true, y_pred)
@@ -61,6 +53,12 @@ class Regression_Model_Trainer:
                 return {
                     'r2_score': r2_score(y_true, y_pred)
                 }
+        else:
+            return {
+                'mean_squared_error': mean_squared_error(y_true, y_pred),
+                'mean_absolute_error': mean_absolute_error(y_true, y_pred),
+                'r2_score': r2_score(y_true, y_pred)
+            }
     
     def fine_tune_hyperparameters(self, model, model_name):
         params_grid = getattr(self.config.params, model_name)
@@ -127,15 +125,13 @@ class Classification_Model_Trainer:
     def __init__(self,config: Model_Trainer_Config) -> None:
         self.config = config
         self.models = {
-            'Logistic Regression': LogisticRegression(),
-            'Decision Tree Classifier': DecisionTreeClassifier(),
-            'Random Forest Classifier': RandomForestClassifier(),
-            'Support Vector Classifier': SVC(),
+            'LogisticRegression': LogisticRegression(),
+            'DecisionTreeClassifier': DecisionTreeClassifier(),
+            'RandomForestClassifier': RandomForestClassifier(),
+            'SVC': SVC(),
             'GaussianNB': GaussianNB(),
-            'K-Nearest Neighbors Classifier': KNeighborsClassifier(),
-            'Gradient Boosting Classifier': GradientBoostingClassifier(),
-            'Lasso Classifier': Lasso(),
-            'Ridge Classifier': Ridge(),
+            'KNeighborsClassifier': KNeighborsClassifier(),
+            'GradientBoostingClassifier': GradientBoostingClassifier(),
         }
         self.train_data = pd.read_csv(self.config.train_path)
         self.y = self.train_data['target']
@@ -150,14 +146,9 @@ class Classification_Model_Trainer:
         self.best_model = None
         
     def get_metrics(self, y_true, y_pred):
-        if self.manual_config['evaluation_metric']=='auto':
-            return {
-                'accuracy_score': accuracy_score(y_true, y_pred),
-                'f1_score': f1_score(y_true, y_pred),
-                'precision_score': precision_score(y_true, y_pred),
-                'recall_score': recall_score(y_true, y_pred)
-            }
-        else:
+        
+        if self.manual_config and self.manual_config['evaluation_metric']!='auto':
+            
             if self.manual_config['evaluation_metric']=='accuracy_score':
                 return {
                     'accuracy_score': accuracy_score(y_true, y_pred)
@@ -174,6 +165,13 @@ class Classification_Model_Trainer:
                 return {
                     'recall_score': recall_score(y_true, y_pred)
                 }
+        else:
+            return {
+                'accuracy_score': accuracy_score(y_true, y_pred),
+                'f1_score': f1_score(y_true, y_pred),
+                'precision_score': precision_score(y_true, y_pred),
+                'recall_score': recall_score(y_true, y_pred)
+            }
     
     def fine_tune_hyperparameters(self, model, model_name):
         params_grid = getattr(self.config.params, model_name)
@@ -200,6 +198,9 @@ class Classification_Model_Trainer:
         
         if manual_config == None or manual_config['algorithm']=='auto':
             for model_name, model in self.models.items():
+                if model_name == 'Lasso Classifier' or model_name == 'Ridge Classifier':
+                    continue
+                
                 model.fit(self.X_train, self.y_train)
 
                 logger.info(f'{model_name} model trained successfully')
@@ -217,7 +218,7 @@ class Classification_Model_Trainer:
                     self.best_model_info = {model_name: [model, metrics]}
                     self.best_model = model
 
-            best_model= self.finetune_and_save_model(self.best_model, list(self.best_model_info.keys())[0])
+            best_model= self.finetune_model(self.best_model, list(self.best_model_info.keys())[0])
             self.save_model(best_model, list(self.best_model_info.keys())[0])
             
         else:
@@ -245,8 +246,8 @@ class Clustering_Model_Trainer:
         self.models = {
             'KMeans': KMeans(),
             'DBSCAN': DBSCAN(),
-            'Agglomerative Clustering': AgglomerativeClustering(),
-            'Mean Shift': MeanShift(),
+            'AgglomerativeClustering': AgglomerativeClustering(),
+            'MeanShift': MeanShift(),
             'Birch': Birch(),
         }
         self.train_data = pd.read_csv(self.config.train_path)
@@ -329,6 +330,7 @@ class Clustering_Model_Trainer:
                     self.best_model = model
 
             best_model = self.finetune_model(self.best_model, list(self.best_model_info.keys())[0])
+            logger.info(f'Finetuned: {list(self.best_model_info.keys())[0]}')
             self.save_model(best_model, list(self.best_model_info.keys())[0])
         
         else:

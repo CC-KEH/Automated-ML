@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/aea2b30c42af4ee29936df6396f1f708/artifacts
+end_time: 1732031314409
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: aea2b30c42af4ee29936df6396f1f708
+run_name: gaudy-dolphin-531
+run_uuid: aea2b30c42af4ee29936df6396f1f708
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732031304225
+status: 3
+tags: []
+user_id: arbas

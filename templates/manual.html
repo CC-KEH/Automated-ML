@@ -209,69 +209,65 @@
     <script>
         const regressionModels = {
             'Auto': { hyperparameters: {} },
-            'Linear Regression': { hyperparameters: {} },
-            'Elastic Net Regressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } },
-            'Random Forest Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Gradient Boosting Regressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Support Vector Regressor': {
+            'LinearRegression': { hyperparameters: {} },
+            'ElasticNetRegressor': { hyperparameters: { alpha: 'number', l1_ratio: 'number' } },
+            'RandomForestRegressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'GradientBoostingRegressor': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'SVR': {
                 hyperparameters: {
                     kernel: { type: 'dropdown', options: ['linear', 'poly', 'rbf', 'sigmoid'] },
                     C: 'number'
                 }
             },
-            'K-Nearest Neighbors Regressor': {
+            'KNeighborsRegressor': {
                 hyperparameters: {
                     n_neighbors: 'number',
                     weights: { type: 'dropdown', options: ['uniform', 'distance'] }
                 }
             },
-            'Decision Tree Regressor': {
+            'DecisionTreeRegressor': {
                 hyperparameters: {
                     max_depth: 'number',
                     criterion: { type: 'dropdown', options: ['mse', 'friedman_mse', 'mae', 'poisson'] }
                 }
             },
-            'Lasso Regressor': { hyperparameters: { alpha: 'number' } },
-            'Ridge Regressor': { hyperparameters: { alpha: 'number' } },
         };
 
         const classificationModels = {
             'Auto': { hyperparameters: {} },
-            'Logistic Regression': {
+            'LogisticRegression': {
                 hyperparameters: {
                     penalty: { type: 'dropdown', options: ['l1', 'l2', 'elasticnet', 'none'] },
                     solver: { type: 'dropdown', options: ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'] }
                 }
             },
-            'Random Forest Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Gradient Boosting Classifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
-            'Support Vector Classifier': {
+            'RandomForestClassifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'GradientBoostingClassifier': { hyperparameters: { n_estimators: 'number', max_depth: 'number' } },
+            'SVC': {
                 hyperparameters: {
                     kernel: { type: 'dropdown', options: ['linear', 'poly', 'rbf', 'sigmoid'] },
                     C: 'number'
                 }
             },
-            'K-Nearest Neighbors Classifier': {
+            'KNeighborsClassifier': {
                 hyperparameters: {
                     n_neighbors: 'number',
                     weights: { type: 'dropdown', options: ['uniform', 'distance'] }
                 }
             },
-            'Decision Tree Classifier': {
+            'DecisionTreeClassifier': {
                 hyperparameters: {
                     max_depth: 'number',
                     criterion: { type: 'dropdown', options: ['gini', 'entropy', 'log_loss'] }
                 }
             },
-            'Lasso Classifier': { hyperparameters: { alpha: 'number' } },
-            'Ridge Classifier': { hyperparameters: { alpha: 'number' } },
         };
 
         const clusteringModels = {
             'Auto': { hyperparameters: {} },
             'K-Means': { hyperparameters: { n_clusters: 'number' } },
             'DBSCAN': { hyperparameters: { eps: 'number', min_samples: 'number' } },
-            'Agglomerative Clustering': { hyperparameters: { n_clusters: 'number' } },
+            'AgglomerativeClustering': { hyperparameters: { n_clusters: 'number' } },
             'Mean Shift': { hyperparameters: { bandwidth: 'number' } },
             'Birch': {
                 hyperparameters: {
@@ -402,9 +398,6 @@
             manualOptions.style.display = (transformationType === 'manual') ? 'block' : 'none';
         }
 
-        function acknowledge() {
-            alert('Model training started.');
-        }
 
         // Handle form submission
         function submitConfig() {
@@ -454,18 +447,11 @@
                 task_type: taskType
             };
 
-            acknowledge(); // Notify user that training has started
-
             fetch('/manual_train', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
-                .then(response => response.json())
-                .then(result => {
-                    alert('Model training started: ' + result.message);
-                })
-                .catch(error => console.error('Error:', error));
         }
 
         window.onload = populateAlgorithmOptions; // Populate on load

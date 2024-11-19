@@ -62,84 +62,73 @@ def upload_file():
     return "Invalid file type"
 
 
-@app.route("/train", methods=["POST"])
-def train():
-    # Simulate training by calling an external script
-    os.system(f"{sys.executable} main.py")  # Assuming this is your training script
-    return "Training Successful!"
-
 
 @app.route("/manual_config", methods=["GET"])
 def manual_config():
     return render_template("manual.html")
 
+@app.route("/train", methods=["POST"])
+def train():
 
-@app.route("/manual_train", methods=["POST"])
+    os.system(f"{sys.executable} main.py") 
+    
+    algorithm_name, algorithm_info, metrics = get_model_info()
+    data = pd.read_csv("artifacts/data_ingestion/data.csv")
+    features = data.columns.tolist()
+    features.remove("target")
+    return render_template("model.html", 
+                           model_name=algorithm_name, 
+                           algorithm_info=algorithm_info, 
+                           metrics=metrics, 
+                           features=features)
+
+
+def manually_train():
+    os.system(f"{sys.executable} main.py") 
+    
+    algorithm_name, algorithm_info, metrics = get_model_info()
+    data = pd.read_csv("artifacts/data_ingestion/data.csv")
+    features = data.columns.tolist()
+    features.remove("target")
+    return algorithm_name, algorithm_info, metrics, features
+
+@app.route("/manual_train", methods=["POST", "GET"])
 def manual_train():
     # Parse the received JSON data
     config_data = request.json
-    
-    print(config_data)
     
     # Save the config data to a JSON file
     with open("manual_config.json", "w") as config_file:
         json.dump(config_data, config_file, indent=4)
 
-    train()
-
-    with open("manual_config.json", "r") as f:
-        algorithm = json.load(f)["algorithm"]
-
-    # name, description, hyperparameters, metrics
-    with open("models_info.json", "r") as f:
-        models_info = json.load(f)
-        algorithm_info = models_info[algorithm]["description"]
-
-    with open("artifacts/model_evaluation/metrics.json", "r") as f:
-        metrics = json.load(f)
-
-    # For testing send form with features and target will be predicted
-    data = pd.read_csv("artifacts/data_ingestion/data.csv")
-    features = data.columns.tolist()
-    features.remove("target")
-    
-    print("Rendering model.html")
-    
-    # return render_template(
-    #     "model.html",
-    #     model_name=algorithm,
-    #     algorithm_info=algorithm_info,
-    #     metrics=metrics,
-    #     features=features,
-    # )
-    return redirect(url_for('model'))
-
-@app.route("/model", methods=["GET","POST"])
-def result():
-
-    with open("manual_config.json", "r") as f:
-        algorithm = json.load(f)["algorithm"]
-
-    # name, description, hyperparameters, metrics
-    with open("models_info.json", "r") as f:
-        models_info = json.load(f)
-        algorithm_info = models_info[algorithm]["description"]
-
-    with open("artifacts/model_evaluation/metrics.json", "r") as f:
-        metrics = json.load(f)
-
-    # For testing send form with features and target will be predicted
-    data = pd.read_csv("artifacts/data_ingestion/data.csv")
-    features = data.columns.tolist()
-    features.remove("target")
-
+    algorithm_name, algorithm_info, metrics, features = manually_train()
+    print(algorithm_name, algorithm_info, metrics, features)
     return render_template(
         "model.html",
-        model_name=algorithm,
+        model_name=algorithm_name,
         algorithm_info=algorithm_info,
         metrics=metrics,
         features=features,
     )
+
+@app.route('/model')
+def model():
+    return render_template('model.html')
+
+def get_model_info():
+    algorithm = os.listdir("artifacts/model_trainer")[0].split(".")[0]
+
+    # name, description, hyperparameters, metrics
+    with open("models_info.json", "r") as f:
+        models_info = json.load(f)
+        algorithm_name = models_info[algorithm]["name"]
+        algorithm_info = models_info[algorithm]["description"]
+
+    with open("artifacts/model_evaluation/metrics.json", "r") as f:
+        metrics = json.load(f)
+
+    return algorithm_name, algorithm_info, metrics
+
 
 @app.route('/download_model', methods=['GET'])
 def download_model():

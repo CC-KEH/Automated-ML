@@ -11,8 +11,15 @@ class ModelEvaluationTrainingPipeline:
         pass
     
     def main(self,manual_config=None):
-        task_type = manual_config['task_type']
-        
+        if manual_config == None:
+            data = pd.read_csv('artifacts/data_ingestion/data.csv')
+            if data['target'].nunique() < 10:
+                task_type = 'classification'
+            else:
+                task_type = 'regression'
+                
+        else:
+            task_type = manual_config['task_type']
             
         try:
             if task_type == 'regression':

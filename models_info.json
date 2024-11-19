@@ -1,81 +1,81 @@
 {
-    "Linear Regression": {
+    "LinearRegression": {
         "name": "Linear Regression",
         "description": "Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables)."
     },
-    "Logistic Regression": {
+    "LogisticRegression": {
         "name": "Logistic Regression",
         "description": "Logistic regression is a statistical model that in its basic form uses a logistic function to model a binary dependent variable, although many more complex extensions exist."
     },
-    "Lasso Regressor": {
+    "LassoRegressor": {
         "name": "Lasso Regressor",
         "description": "Lasso regression is a type of linear regression that uses shrinkage. Shrinkage is where data values are shrunk towards a central point, like the mean."
     },
-    "Ridge Regressor": {
+    "RidgeRegressor": {
         "name": "Ridge Regressor",
         "description": "Ridge regression is a way to create a parsimonious model when the number of predictor variables in a set exceeds the number of observations, or when a data set has multicollinearity (correlations between predictor variables)."
     },
-    "Elastic Net Regressor": {
+    "ElasticNetRegressor": {
         "name": "Elastic Net Regressor",
         "description": "Elastic Net is a regularized regression method that linearly combines the L1 and L2 penalties of the lasso and ridge methods."
     },
-    "Lasso Classifier": {
+    "LassoClassifier": {
         "name": "Lasso Classifier",
         "description": "Lasso regression is a type of linear regression that uses shrinkage. Shrinkage is where data values are shrunk towards a central point, like the mean."
     },
-    "Ridge Classifier": {
+    "RidgeClassifier": {
         "name": "Ridge Classifier",
         "description": "Ridge regression is a way to create a parsimonious model when the number of predictor variables in a set exceeds the number of observations, or when a data set has multicollinearity (correlations between predictor variables)."
     },
-    "Elastic Net Classifier": {
+    "ElasticNetClassifier": {
         "name": "Elastic Net Classifier",
         "description": "Elastic Net is a regularized regression method that linearly combines the L1 and L2 penalties of the lasso and ridge methods."
     },
-    "Random Forest Regressor": {
+    "RandomForestRegressor": {
         "name": "Random Forest Regressor",
         "description": "A random forest is a meta estimator that fits a number of classifying decision trees on various sub-samples of the dataset and uses averaging to improve the predictive accuracy and control over-fitting."
     },
-    "Random Forest Classifier": {
+    "RandomForestClassifier": {
         "name": "Random Forest Classifier",
         "description": "A random forest is a meta estimator that fits a number of classifying decision trees on various sub-samples of the dataset and uses averaging to improve the predictive accuracy and control over-fitting."
     },
-    "Decision Tree Regressor": {
+    "DecisionTreeRegressor": {
         "name": "Decision Tree Regressor",
         "description": "A decision tree is a flowchart-like structure in which each internal node represents a feature(or attribute), each branch represents a decision rule, and each leaf node represents the outcome."
     },
-    "Decision Tree Classifier": {
+    "DecisionTreeClassifier": {
         "name": "Decision Tree Classifier",
         "description": "A decision tree is a flowchart-like structure in which each internal node represents a feature(or attribute), each branch represents a decision rule, and each leaf node represents the outcome."
     },
-    "K-Nearest Neighbors Regressor": {
+    "KNeighborsRegressor": {
         "name": "K-Nearest Neighbors Regressor",
         "description": "K-nearest neighbors algorithm (k-NN) is a non-parametric method used for classification and regression. In both cases, the input consists of the k closest training examples in the feature space."
     },
-    "K-Nearest Neighbors Classifier": {
+    "KNeighborsClassifier": {
         "name": "K-Nearest Neighbors Classifier",
         "description": "K-nearest neighbors algorithm (k-NN) is a non-parametric method used for classification and regression. In both cases, the input consists of the k closest training examples in the feature space."
     },
-    "Support Vector Regressor": {
+    "SVR": {
         "name": "Support Vector Machine Regressor",
         "description": "In machine learning, support-vector machines (SVMs, also support-vector networks) are supervised learning models with associated learning algorithms that analyze data used for classification and regression analysis."
     },
-    "Support Vector Classifier": {
+    "SVC": {
         "name": "Support Vector Machine Classifier",
         "description": "In machine learning, support-vector machines (SVMs, also support-vector networks) are supervised learning models with associated learning algorithms that analyze data used for classification and regression analysis."
     },
-    "Gradient Boosting Regressor": {
+    "GradientBoostingRegressor": {
         "name": "Gradient Boosting Regressor",
         "description": "Gradient boosting is a machine learning technique for regression and classification problems, which produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees."
     },
-    "Gradient Boosting Classifier": {
+    "GradientBoostingClassifier": {
         "name": "Gradient Boosting Classifier",
         "description": "Gradient boosting is a machine learning technique for regression and classification problems, which produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees."
     },
-    "XGBoost Regressor": {
+    "XGBoostRegressor": {
         "name": "XGBoost Regressor",
         "description": "XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. It implements machine learning algorithms under the Gradient Boosting framework."
     },
-    "XGBoost Classifier": {
+    "XGBoostClassifier": {
         "name": "XGBoost Classifier",
         "description": "XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. It implements machine learning algorithms under the Gradient Boosting framework."
     }

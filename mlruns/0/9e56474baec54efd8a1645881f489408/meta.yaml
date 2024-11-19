@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/9e56474baec54efd8a1645881f489408/artifacts
+end_time: 1732033944817
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9e56474baec54efd8a1645881f489408
+run_name: delightful-bird-606
+run_uuid: 9e56474baec54efd8a1645881f489408
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732033939264
+status: 3
+tags: []
+user_id: arbas

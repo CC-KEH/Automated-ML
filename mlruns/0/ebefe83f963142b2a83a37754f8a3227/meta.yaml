@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/ebefe83f963142b2a83a37754f8a3227/artifacts
+end_time: 1732034399403
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ebefe83f963142b2a83a37754f8a3227
+run_name: gregarious-hare-829
+run_uuid: ebefe83f963142b2a83a37754f8a3227
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732034392422
+status: 3
+tags: []
+user_id: arbas

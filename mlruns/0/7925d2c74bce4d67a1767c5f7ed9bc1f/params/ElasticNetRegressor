@@ -1,0 +1,1 @@
+{'alpha': [0.1, 0.5, 1.0], 'l1_ratio': [0.1, 0.5, 1.0], 'fit_intercept': [True, False], 'normalize': [True, False]}

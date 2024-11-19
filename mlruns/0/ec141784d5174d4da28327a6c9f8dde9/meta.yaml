@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/ec141784d5174d4da28327a6c9f8dde9/artifacts
+end_time: 1732033132292
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ec141784d5174d4da28327a6c9f8dde9
+run_name: debonair-seal-110
+run_uuid: ec141784d5174d4da28327a6c9f8dde9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732033127839
+status: 3
+tags: []
+user_id: arbas
