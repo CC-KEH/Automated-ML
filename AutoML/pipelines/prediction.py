@@ -2,10 +2,12 @@ import os
 import pickle
 from pathlib import Path
 
+import joblib
+
 class PredictionPipeline:
     def __init__(self):
         self.model_path = self.get_model_path()
-        self.model = pickle.load(open(self.model_path, 'rb'))
+        self.model = joblib.load(self.model_path)
 
     def get_model_path(self):
         models = os.listdir('artifacts/model_trainer')

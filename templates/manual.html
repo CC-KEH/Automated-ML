@@ -452,6 +452,22 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response:', data);
+                    // Redirect to the model page
+                    window.location.href = data.redirect_url;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error occurred during training. Check console for details.');
+                });
+
         }
 
         window.onload = populateAlgorithmOptions; // Populate on load

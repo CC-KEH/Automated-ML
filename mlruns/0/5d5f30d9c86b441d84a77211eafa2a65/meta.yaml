@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/5d5f30d9c86b441d84a77211eafa2a65/artifacts
+end_time: 1732436056133
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5d5f30d9c86b441d84a77211eafa2a65
+run_name: youthful-skink-988
+run_uuid: 5d5f30d9c86b441d84a77211eafa2a65
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732436051770
+status: 3
+tags: []
+user_id: arbas

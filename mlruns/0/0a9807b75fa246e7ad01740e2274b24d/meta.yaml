@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/0a9807b75fa246e7ad01740e2274b24d/artifacts
+end_time: 1732619935212
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0a9807b75fa246e7ad01740e2274b24d
+run_name: peaceful-smelt-820
+run_uuid: 0a9807b75fa246e7ad01740e2274b24d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732619926739
+status: 3
+tags: []
+user_id: arbas

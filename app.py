@@ -6,12 +6,13 @@ import logger
 import numpy as np
 import pandas as pd
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, session
 
 from AutoML.logger import logger
 from AutoML.pipelines.prediction import PredictionPipeline
 
 app = Flask(__name__)
+app.secret_key = "e8f79cd2e6b3f947fc7c7bfc91c4b7df"
 
 # Folder where uploaded files will be saved
 UPLOAD_FOLDER = "uploads/"
@@ -82,16 +83,6 @@ def train():
                            metrics=metrics, 
                            features=features)
 
-
-def manually_train():
-    os.system(f"{sys.executable} main.py") 
-    
-    algorithm_name, algorithm_info, metrics = get_model_info()
-    data = pd.read_csv("artifacts/data_ingestion/data.csv")
-    features = data.columns.tolist()
-    features.remove("target")
-    return algorithm_name, algorithm_info, metrics, features
-
 @app.route("/manual_train", methods=["POST", "GET"])
 def manual_train():
     # Parse the received JSON data
@@ -103,17 +94,43 @@ def manual_train():
 
     algorithm_name, algorithm_info, metrics, features = manually_train()
     print(algorithm_name, algorithm_info, metrics, features)
+    
+    session['model_data'] = {
+        "model_name": algorithm_name,
+        "algorithm_info": algorithm_info,
+        "metrics": metrics,
+        "features": features,
+    }
+
+    # Redirect to the model route
+    return jsonify({"redirect_url": url_for("model")})
+
+def manually_train():
+    os.system(f"{sys.executable} main.py") 
+    
+    algorithm_name, algorithm_info, metrics = get_model_info()
+    data = pd.read_csv("artifacts/data_ingestion/data.csv")
+    features = data.columns.tolist()
+    features.remove("target")
+    return algorithm_name, algorithm_info, metrics, features
+
+
+
+# @app.route('/model')
+# def model():
+#     return render_template('model.html')
+
+@app.route('/model', methods=["GET"])
+def model():
+    model_data = session.get('model_data', {})
     return render_template(
         "model.html",
-        model_name=algorithm_name,
-        algorithm_info=algorithm_info,
-        metrics=metrics,
-        features=features,
+        model_name=model_data.get("model_name"),
+        algorithm_info=model_data.get("algorithm_info"),
+        metrics=model_data.get("metrics"),
+        features=model_data.get("features"),
     )
 
-@app.route('/model')
-def model():
-    return render_template('model.html')
 
 def get_model_info():
     algorithm = os.listdir("artifacts/model_trainer")[0].split(".")[0]
@@ -165,7 +182,14 @@ def predict():
                 prediction_dict[key] = float(value)
             except ValueError:
                 pass
-    data = [val for val in prediction_dict.values()]
+            
+    data = []
+    model_features = pd.read_csv("artifacts/data_transformation/train.csv").columns.tolist()
+    model_features.remove("target")
+    for feature in prediction_dict.keys():
+        if feature in model_features:
+            data.append(prediction_dict[feature])
+            
     print(data)
     # Fix the issue of no of features mismatch, model might be trained on different no of features
     data = np.array(data).reshape(1,len(data))
@@ -176,7 +200,17 @@ def predict():
         output = 'True'
     else:
         output = 'False'
+    print(output)
+    
+    session['output'] = output
+    return redirect(url_for('result'))
+
+
+@app.route("/result", methods=["GET"])
+def result():
+    output = session.get('output', 'No Result')
     return render_template("result.html", output=output)
+
 
 if __name__ == "__main__":
     if not os.path.exists(UPLOAD_FOLDER):

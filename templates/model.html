@@ -23,10 +23,12 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin-bottom: 20px;
     }
-    h2{
+
+    h2 {
         font-size: 36px;
         color: #fff;
     }
+
     p {
         color: #fff;
         font-size: 16px;
@@ -44,7 +46,7 @@
         color: #8793ff;
     }
 
-    .algorithm_info{
+    .algorithm_info {
         width: 80%;
     }
 
@@ -65,7 +67,8 @@
         height: 100%;
         align-content: space-between;
     }
-    ul{
+
+    ul {
         color: #fff;
     }
 
@@ -73,9 +76,11 @@
         text-decoration: none;
         color: #8793ff;
     }
-    label{
+
+    label {
         color: #fff;
     }
+
     input {
         padding: 10px;
         margin-top: 10px;
@@ -114,12 +119,12 @@
         <div class="info_div">
             <h1>Best Suited Model</h1>
             <span class="model_name">{{ model_name }}</span>
-        <br>
-        <br>
+            <br>
+            <br>
             <div class="algorithm_info">
                 <p>{{ algorithm_info }}</p>
             </div>
-        <a href="/download_model">Download Model</a>
+            <a href="/download_model">Download Model</a>
 
         </div>
         <div class="model_report">
@@ -161,14 +166,15 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Display response data or handle it as needed
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 </script>
+
 </html>

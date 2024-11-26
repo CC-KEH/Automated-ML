@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/ad1c3cf3638546aeb92e5da4ed82c6b6/artifacts
+end_time: 1732620912458
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ad1c3cf3638546aeb92e5da4ed82c6b6
+run_name: trusting-donkey-57
+run_uuid: ad1c3cf3638546aeb92e5da4ed82c6b6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732620906531
+status: 3
+tags: []
+user_id: arbas
