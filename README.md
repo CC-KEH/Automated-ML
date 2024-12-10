@@ -5,6 +5,7 @@
 - [Automated Machine Learning](#automated-machine-learning)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
+  - [Installation](#installation)
   - [Conclusion](#conclusion)
 
 ## Introduction
@@ -21,6 +22,10 @@ Automated Machine Learning (AutoML) is the process of automating the end-to-end 
 - Model Deployment
 
 AutoML automates these steps, which makes it easier for non-experts to use machine learning models.
+
+## Installation
+
+Python 3.8.19
 
 ## Conclusion
 
