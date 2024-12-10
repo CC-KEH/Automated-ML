@@ -1,5 +1,7 @@
 # Automated Machine Learning
 
+[AWS Link](65.1.131.196:8080)
+
 ## Table of Contents
 
 - [Automated Machine Learning](#automated-machine-learning)
