@@ -438,19 +438,21 @@
                 hyperparameters[select.id] = select.value; // Get value of selected option
             });
 
-            const data = {
+            const formData = new FormData();
+            formData.append("dataset", datasetFile);
+            formData.append("config", JSON.stringify({
                 data_ingestion: dataIngestion,
                 transformation_config: transformation_config,
                 algorithm: selectedAlgorithm,
                 hyperparameters: hyperparameters,
                 evaluation_metric: evaluationMetric,
                 task_type: taskType
-            };
+            }));
 
+            // Send the FormData
             fetch('/manual_train', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: formData
             })
                 .then(response => {
                     if (!response.ok) {
@@ -467,7 +469,6 @@
                     console.error('Error:', error);
                     alert('Error occurred during training. Check console for details.');
                 });
-
         }
 
         window.onload = populateAlgorithmOptions; // Populate on load

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/a9242cda935d4e8db74d810ddddfdde8/artifacts
+end_time: 1733844529048
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a9242cda935d4e8db74d810ddddfdde8
+run_name: sneaky-chimp-568
+run_uuid: a9242cda935d4e8db74d810ddddfdde8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1733844518578
+status: 3
+tags: []
+user_id: arbas

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/arbas/Documents/Projects/Machine-Learning/EndToEnd_Deployed/Automated_ML/mlruns/0/1f55b7d434084684bc24dda4d065d004/artifacts
+end_time: 1733844529048
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1f55b7d434084684bc24dda4d065d004
+run_name: bustling-zebra-807
+run_uuid: 1f55b7d434084684bc24dda4d065d004
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1733844519099
+status: 3
+tags: []
+user_id: arbas

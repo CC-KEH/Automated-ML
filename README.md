@@ -1,7 +1,8 @@
 # Automated Machine Learning
 
-## Table of Contents
+![alt text](automl.png)
 
+## Table of Contents
 - [Automated Machine Learning](#automated-machine-learning)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
@@ -19,13 +20,19 @@ Automated Machine Learning (AutoML) is the process of automating the end-to-end 
 - Model Selection
 - Hyperparameter Tuning
 - Model Evaluation
-- Model Deployment
 
 AutoML automates these steps, which makes it easier for non-experts to use machine learning models.
 
+![alt text](manual.png)
+
 ## Installation
 
-Python 3.8.19
+```bash
+conda create -n automl python=3.8
+conda activate automl
+pip install -r requirements.txt
+python app.py
+```
 
 ## Conclusion
 

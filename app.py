@@ -70,8 +70,18 @@ def manual_config():
 
 @app.route("/train", methods=["POST"])
 def train():
+    if "dataset" not in request.files:
+        return "No file part"
 
-    os.system(f"{sys.executable} main.py") 
+    file = request.files["dataset"]
+
+    if file.filename == "":
+        return "No selected file"
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        os.system(f"{sys.executable} main.py") 
     
     algorithm_name, algorithm_info, metrics = get_model_info()
     data = pd.read_csv("artifacts/data_ingestion/data.csv")
@@ -85,13 +95,28 @@ def train():
 
 @app.route("/manual_train", methods=["POST", "GET"])
 def manual_train():
-    # Parse the received JSON data
-    config_data = request.json
+    # Get the dataset file from the request
+    dataset = request.files.get("dataset")
+    if not dataset:
+        return jsonify({"error": "Dataset file is missing"}), 400
+
+    # Save the dataset file
+    dataset_path = os.path.join("uploads", dataset.filename)
+    os.makedirs("uploads", exist_ok=True)
+    dataset.save(dataset_path)
+
+    # Get the config data
+    config_json = request.form.get("config")
+    if not config_json:
+        return jsonify({"error": "Configuration data is missing"}), 400
     
+    config_data = json.loads(config_json)
+
     # Save the config data to a JSON file
     with open("manual_config.json", "w") as config_file:
         json.dump(config_data, config_file, indent=4)
 
+    # Pass the dataset path and config data to your training function
     algorithm_name, algorithm_info, metrics, features = manually_train()
     print(algorithm_name, algorithm_info, metrics, features)
     
@@ -215,6 +240,4 @@ def result():
 if __name__ == "__main__":
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
-    # app.run(host="0.0.0.0", port=8000, debug=True)
-    # app.run(host="0.0.0.0", port=8080)
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8000, debug=True)
